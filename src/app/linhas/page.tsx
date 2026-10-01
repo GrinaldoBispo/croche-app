@@ -16,7 +16,6 @@ type Linha = {
 const box: React.CSSProperties = { maxWidth: 480, margin: "0 auto", padding: 16, display: "grid", gap: 12 };
 const input: React.CSSProperties = { width: "100%", minHeight: 44, fontSize: 16, padding: "10px 12px", boxSizing: "border-box" };
 const btn: React.CSSProperties = { minHeight: 48, fontSize: 16, fontWeight: 600 };
-const btnSmall: React.CSSProperties = { minHeight: 44, fontSize: 15, fontWeight: 600, padding: "0 12px" };
 
 const emptyForm = { marca: "", textura: "", cor: "", peso_novelo_g: "", preco_pago: "", quantidade: "" };
 
@@ -24,7 +23,7 @@ export default function LinhasPage() {
   const [lista, setLista] = useState<Linha[]>([]);
   const [msg, setMsg] = useState("");
   const [form, setForm] = useState(emptyForm);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
 
   const [marcas, setMarcas] = useState<Array<{ id: string; nome?: string }>>([]);
 
@@ -45,8 +44,8 @@ export default function LinhasPage() {
     carregar();
   }, []);
 
-  function iniciarEdicao(l: Linha) {
-    setEditingId(l.id);
+  function editar(l: Linha) {
+    setEditId(l.id);
     setForm({
       marca: l.marca || "",
       textura: l.textura || l.nome_linha || "",
@@ -59,27 +58,40 @@ export default function LinhasPage() {
   }
 
   function cancelar() {
-    setEditingId(null);
+    setEditId(null);
     setForm(emptyForm);
   }
 
   async function salvar(e: React.FormEvent) {
     e.preventDefault();
     setMsg("salvando...");
-    const payload = {
-      action: editingId ? "update" : "create",
-      table_name: "LINHAS",
-      ...(editingId ? { id: editingId } : {}),
-      data: {
-        ...(editingId ? { id: editingId } : {}),
-        marca: form.marca,
-        textura: form.textura,
-        cor: form.cor,
-        peso_novelo_g: Number(form.peso_novelo_g),
-        preco_pago: Number(form.preco_pago),
-        quantidade: Number(form.quantidade || 0),
-      },
-    };
+    const payload = editId
+      ? {
+          action: "update",
+          table_name: "LINHAS",
+          id: editId,
+          data: {
+            id: editId,
+            marca: form.marca,
+            textura: form.textura,
+            cor: form.cor,
+            peso_novelo_g: Number(form.peso_novelo_g),
+            preco_pago: Number(form.preco_pago),
+            quantidade: Number(form.quantidade || 0),
+          },
+        }
+      : {
+          action: "create",
+          table_name: "LINHAS",
+          data: {
+            marca: form.marca,
+            textura: form.textura,
+            cor: form.cor,
+            peso_novelo_g: Number(form.peso_novelo_g),
+            preco_pago: Number(form.preco_pago),
+            quantidade: Number(form.quantidade || 0),
+          },
+        };
     const r = await fetch("/api/linhas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -92,24 +104,24 @@ export default function LinhasPage() {
     } else setMsg(j.message || "erro");
   }
 
-  async function excluir(id: string) {
-    if (!confirm("Excluir esta linha?")) return;
+  async function excluir() {
+    if (!editId || !confirm("Excluir esta linha?")) return;
     setMsg("excluindo...");
     const r = await fetch("/api/linhas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "delete", table_name: "LINHAS", id }),
+      body: JSON.stringify({ action: "delete", table_name: "LINHAS", id: editId }),
     });
     const j = await r.json();
     if (j.status === "success") {
-      if (editingId === id) cancelar();
+      cancelar();
       await carregar();
     } else setMsg(j.message || "erro");
   }
 
   return (
     <main style={box}>
-      <h1 style={{ margin: 0 }}>{editingId ? "Editar linha" : "Linhas"}</h1>
+      <h1 style={{ margin: 0 }}>Linhas</h1>
       <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
         <select style={input} value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required>
           <option value="">marca...</option>
@@ -120,24 +132,24 @@ export default function LinhasPage() {
         <input style={input} placeholder="peso novelo (g)" inputMode="decimal" value={form.peso_novelo_g} onChange={(e) => setForm({ ...form, peso_novelo_g: e.target.value })} required />
         <input style={input} placeholder="preço pago (R$)" inputMode="decimal" value={form.preco_pago} onChange={(e) => setForm({ ...form, preco_pago: e.target.value })} required />
         <input style={input} placeholder="quantidade (estoque novelos)" inputMode="numeric" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} required />
-        <div style={{ display: "flex", gap: 8 }}>
-          <button style={{ ...btn, flex: 1 }} type="submit">{editingId ? "Salvar edição" : "Salvar linha"}</button>
-          {editingId && <button style={{ ...btn, flex: 1 }} type="button" onClick={cancelar}>Cancelar</button>}
-        </div>
+        <button style={btn} type="submit">{editId ? "Atualizar linha" : "Salvar linha"}</button>
+        {editId && (
+          <>
+            <button style={btn} type="button" onClick={cancelar}>Cancelar</button>
+            <button style={{ ...btn, color: "red" }} type="button" onClick={excluir}>Excluir</button>
+          </>
+        )}
       </form>
       <p>{msg}</p>
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 8 }}>
         {lista.map((l) => {
           const tex = l.textura || l.nome_linha || "—";
           return (
-            <li key={l.id} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, display: "grid", gap: 6 }}>
+            <li key={l.id} onClick={() => editar(l)} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, cursor: "pointer" }}>
               <strong>{l.cor || "—"} · {tex} · {l.marca || "—"}</strong>
-              <span>Preço R$ {Number(l.preco_pago || 0).toFixed(2)} · Peso {Number(l.peso_novelo_g || 0)}g · Qtd {Number(l.quantidade ?? 0)}</span>
-              <span>R$/g: {Number(l.preco_por_g || 0).toFixed(4)}</span>
-              <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-                <button style={{ ...btnSmall, flex: 1 }} type="button" onClick={() => iniciarEdicao(l)}>Editar</button>
-                <button style={{ ...btnSmall, flex: 1 }} type="button" onClick={() => excluir(l.id)}>Excluir</button>
-              </div>
+              <br />Preço R$ {Number(l.preco_pago || 0).toFixed(2)} · Peso {Number(l.peso_novelo_g || 0)}g · Qtd {Number(l.quantidade ?? 0)}
+              <br />R$/g: {Number(l.preco_por_g || 0).toFixed(4)}
+              <br /><small>toque para editar</small>
             </li>
           );
         })}
