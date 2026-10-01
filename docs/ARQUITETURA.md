@@ -6,9 +6,12 @@
 - Banco: Google Sheets no Drive da cliente (TEMPLATE_MASTER: Projeto Croche)
 
 ## Abas (fonte da verdade = cabeçalho físico da planilha)
+- MARCAS: id | nome
 - LINHAS: id | marca | nome_linha | cor | peso_novelo_g | preco_pago | preco_por_g
 - DIFICULDADES: id | nome | fator_multiplicador | descricao
 - RECEITAS: id | nome_item | linha_usada | peso_necessario_g | dificuldade_id | valor_base_g | margem_pct
+- USUARIOS: id | nome | email | senha_hash | papel | ativo | spreadsheet_url | criado_em
+- LOG_ACESSOS: id | usuario_id | acao | em
 
 ## Contratos
 - GET: `?action=seed` cria abas; `?table_name=X&limit=200&offset=0` lê; `?url=` opcional p/ espaço do cliente
@@ -25,6 +28,15 @@
 - Web App: Executar como Eu, acesso Qualquer pessoa (com validação interna depois)
 - `sheet_id`/`API_KEY` só server-side Vercel + PropertiesService (não no browser)
 - Próximo: `USUARIOS` + login no drive central, controle `LOG_ACESSOS`
+
+## Fluxo de Autenticação
+Login valida email+senha (hash SHA-256 de `email:senha`) em USUARIOS, seta cookie httpOnly `croche_user`, grava LOG_ACESSOS. Middleware protege tudo exceto `/login`, `/register`, `/api/login`, `/api/register`, `/api/health`. Menu e `/api/usuarios` exigem papel admin.
+
+## Estrutura de Diretórios
+`src/app/` (login, register, linhas, marcas, dificuldades, receitas, usuarios), `src/app/api/*` (proxy), `src/components/nav.tsx`, `src/lib/sheets.ts`, `apps-script/Code.gs`.
+
+## Integrações Externas
+Vercel → `APPS_SCRIPT_URL` (`/exec`) → Sheets. → Veja `.env.example`.
 
 ## Fora de escopo (v2)
 Pedidos, multi-tenant Postgres, NextAuth completo, upload fotos, pagamento.
