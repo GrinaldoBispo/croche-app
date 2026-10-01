@@ -25,7 +25,11 @@ export default function UsuariosPage() {
   }
 
   useEffect(() => {
-    carregar();
+    fetch("/api/me", { cache: "no-store" }).then(async (r) => {
+      const j = r.ok ? await r.json() : null;
+      if (j?.papel !== "admin") window.location.href = "/linhas";
+      else carregar();
+    });
   }, []);
 
   function editar(u: Usuario) {

@@ -1,12 +1,26 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
+import { cookies } from "next/headers";
 import { appsScriptGet, appsScriptPost } from "@/lib/sheets";
 
 export function hashSenha(email: string, senha: string) {
   return createHash("sha256").update(`${email.trim().toLowerCase()}:${senha}`).digest("hex");
 }
 
+async function papelSessao() {
+  try {
+    const jar = await cookies();
+    const raw = jar.get("croche_user")?.value;
+    if (!raw) return null;
+    return (JSON.parse(Buffer.from(raw, "base64").toString()) as { papel?: string }).papel || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(req: Request) {
+  if ((await papelSessao()) !== "admin")
+    return NextResponse.json({ status: "error", message: "somente admin" }, { status: 403 });
   const { searchParams } = new URL(req.url);
   const limit = searchParams.get("limit") || "200";
   const offset = searchParams.get("offset") || "0";
@@ -23,6 +37,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  if ((await papelSessao()) !== "admin")
+    return NextResponse.json({ status: "error", message: "somente admin" }, { status: 403 });
   try {
     const body = await req.json();
     const data = { ...(body.data || {}) } as Record<string, unknown>;
