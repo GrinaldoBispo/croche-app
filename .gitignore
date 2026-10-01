@@ -3,5 +3,6 @@ node_modules/
 .vercel/
 .env
 .env.local
+tsconfig.tsbuildinfo
 *.log
 .DS_Store
