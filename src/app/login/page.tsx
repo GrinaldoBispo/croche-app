@@ -51,7 +51,13 @@ export default function LoginPage() {
         .auth-btn:disabled { opacity: .6; }
         .auth-msg { min-height: 20px; font-size: 14px; color: #b91c1c; }
         .auth-msg.ok { color: #15803d; }
-        @media (max-width: 760px) { .auth-brand { display: none; } .auth-card { width: 100%; } }
+        @media (max-width: 760px) {
+          .auth-wrap { flex-direction: column; gap: 16; }
+          .auth-brand { min-width: 0; text-align: center; }
+          .auth-brand h1 { font-size: 28px; margin-bottom: 4px; }
+          .auth-brand p { font-size: 15px; }
+          .auth-card { width: 100%; }
+        }
       `}</style>
       <div className="auth-wrap">
         <div className="auth-brand">
