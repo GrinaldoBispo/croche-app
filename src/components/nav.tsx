@@ -29,6 +29,7 @@ export default function Nav() {
         <a href="/" style={{ fontWeight: 800, textDecoration: "none", color: "inherit", fontSize: 18 }}>Croche App</a>
         <nav style={{ display: "flex", gap: 12, marginLeft: "auto", fontSize: 15 }}>
           <a href="/linhas">Linhas</a>
+          <a href="/receitas">Receitas</a>
           {papel === "admin" && <a href="/usuarios">Usuários</a>}
           <button onClick={sair} style={{ border: 0, background: "transparent", cursor: "pointer", fontSize: 15 }}>Sair</button>
         </nav>

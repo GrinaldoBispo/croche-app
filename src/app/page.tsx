@@ -20,10 +20,20 @@ export default function Home() {
       {papel === "admin" && (
         <>
           <a style={btn} href="/linhas">Linhas</a>
+          <a style={btn} href="/marcas">Marcas</a>
+          <a style={btn} href="/dificuldades">Dificuldades</a>
+          <a style={btn} href="/receitas">Receitas</a>
           <a style={btn} href="/usuarios">Usuários</a>
         </>
       )}
-      {papel === "user" && <a style={btn} href="/linhas">Linhas</a>}
+      {papel === "user" && (
+        <>
+          <a style={btn} href="/linhas">Linhas</a>
+          <a style={btn} href="/marcas">Marcas</a>
+          <a style={btn} href="/dificuldades">Dificuldades</a>
+          <a style={btn} href="/receitas">Receitas</a>
+        </>
+      )}
     </main>
   );
 }

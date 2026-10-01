@@ -20,11 +20,18 @@ export default function LinhasPage() {
   const [msg, setMsg] = useState("");
   const [form, setForm] = useState({ marca: "", nome_linha: "", cor: "", peso_novelo_g: "", preco_pago: "" });
 
+  const [marcas, setMarcas] = useState<Array<{ id: string; nome?: string }>>([]);
+
   async function carregar() {
     setMsg("carregando...");
-    const r = await fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" });
-    const j = await r.json();
+    const [rl, rm] = await Promise.all([
+      fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
+      fetch("/api/marcas?limit=200", { cache: "no-store" }),
+    ]);
+    const j = await rl.json();
+    const m = await rm.json();
     setLista(j.data || []);
+    setMarcas(m.data || []);
     setMsg(j.total === 0 ? "nenhuma linha ainda" : `${j.total} encontrada(s)`);
   }
 
@@ -61,7 +68,10 @@ export default function LinhasPage() {
     <main style={box}>
       <h1 style={{ margin: 0 }}>Linhas</h1>
       <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
-        <input style={input} placeholder="marca" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required />
+        <select style={input} value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required>
+          <option value="">marca...</option>
+          {marcas.map((m) => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+        </select>
         <input style={input} placeholder="nome da linha" value={form.nome_linha} onChange={(e) => setForm({ ...form, nome_linha: e.target.value })} required />
         <input style={input} placeholder="cor" value={form.cor} onChange={(e) => setForm({ ...form, cor: e.target.value })} />
         <input style={input} placeholder="peso novelo (g)" inputMode="decimal" value={form.peso_novelo_g} onChange={(e) => setForm({ ...form, peso_novelo_g: e.target.value })} required />
