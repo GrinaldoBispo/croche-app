@@ -16,6 +16,7 @@
 - Google Apps Script + Google Sheets (Drive da cliente)
 
 ## Convenção de codificação
+- Mobile-first sempre: container máx 480px, inputs mín 44px, botões mín 48px, empilhar no `@media (max-width:760px)` — nunca `display:none` na marca
 - CRUD sempre por `id`, nunca por nº linha; `_lineIndex` só interno
 - Uma etapa por vez, mudança cirúrgica, validar com `/exec` real
 - Verificação: `GET ?table_name=LINHAS&limit=200` + `POST create/update/delete` por `id`

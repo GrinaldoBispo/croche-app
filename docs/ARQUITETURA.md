@@ -16,6 +16,11 @@
 - Regras: `_lineIndex` só interno, `line_index<=1` bloqueado, `preco_por_g = preco_pago/peso_novelo_g` auto em LINHAS, `LockService 10s` na escrita
 - Código validado: `apps-script/Code.gs` v3 (seed + CRUD testados em 01/10/2026)
 
+## Front mobile-first (foco do projeto)
+- Container máx 480px, inputs mín 44px, botões mín 48px, fonte 16px (sem zoom iOS)
+- Breakpoint 760px só empilha, nunca esconde marca
+- Validar toda tela no celular antes de commitar
+
 ## Segurança MVP
 - Web App: Executar como Eu, acesso Qualquer pessoa (com validação interna depois)
 - `sheet_id`/`API_KEY` só server-side Vercel + PropertiesService (não no browser)
