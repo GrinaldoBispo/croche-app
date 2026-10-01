@@ -1,6 +1,6 @@
 # CHECKPOINT — croche-app
 - Data: 2026-10-01
-- Feito: /linhas modelo clean usuarios (toque p/ editar, excluir no form)
-- Onde: `src/app/linhas/page.tsx` igual `src/app/usuarios/page.tsx`
-- Próximo: commit+push, testar edição real no /linhas
+- Feito: marcas+dificuldades modelo clean, virgula fator corrigida
+- Onde: `src/app/marcas/page.tsx`, `src/app/dificuldades/page.tsx`
+- Próximo: receitas modelo clean, commit+push
 - Bloqueio: nenhum
