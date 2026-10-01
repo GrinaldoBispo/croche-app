@@ -1,7 +1,9 @@
 var TABELAS_PADRAO = {
   LINHAS: ["id","marca","nome_linha","cor","peso_novelo_g","preco_pago","preco_por_g"],
   DIFICULDADES: ["id","nome","fator_multiplicador","descricao"],
-  RECEITAS: ["id","nome_item","linha_usada","peso_necessario_g","dificuldade_id","valor_base_g","margem_pct"]
+  RECEITAS: ["id","nome_item","linha_usada","peso_necessario_g","dificuldade_id","valor_base_g","margem_pct"],
+  USUARIOS: ["id","nome","email","ativo","spreadsheet_url","criado_em"],
+  LOG_ACESSOS: ["id","usuario_id","acao","em"]
 };
 
 function doGet(e) {

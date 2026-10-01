@@ -6,6 +6,7 @@ export default function Home() {
       <h1 style={{ margin: 0 }}>croche-app</h1>
       <a style={btn} href="/login">Entrar</a>
       <a style={btn} href="/linhas">Linhas</a>
+      <a style={btn} href="/usuarios">Usuários</a>
       <a style={btn} href="/api/health">Status</a>
     </main>
   );
