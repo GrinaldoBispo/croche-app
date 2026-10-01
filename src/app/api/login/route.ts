@@ -22,7 +22,16 @@ export async function POST(req: Request) {
       data: { usuario_id: user.id, acao: "login", em: new Date().toISOString() },
     });
 
-    return NextResponse.json({ status: "success", id: user.id, nome: user.nome, papel: user.papel || "user" });
+    const papel = user.papel || "user";
+    const res = NextResponse.json({ status: "success", id: user.id, nome: user.nome, papel });
+    res.cookies.set("croche_user", Buffer.from(JSON.stringify({ id: user.id, papel })).toString("base64"), {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 12,
+      secure: process.env.NODE_ENV === "production",
+    });
+    return res;
   } catch (e) {
     return NextResponse.json({ status: "error", message: String(e) }, { status: 500 });
   }

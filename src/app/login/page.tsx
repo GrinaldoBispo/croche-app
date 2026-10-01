@@ -24,7 +24,7 @@ export default function LoginPage() {
       if (j.status === "success") {
         setOk(true);
         setMsg(`Bem-vindo, ${j.nome}!`);
-        setTimeout(() => (window.location.href = "/linhas"), 800);
+        setTimeout(() => (window.location.href = "/"), 800);
       } else setMsg(j.message || "não autorizado");
     } catch {
       setMsg("erro de rede");
@@ -61,7 +61,7 @@ export default function LoginPage() {
         <div className="auth-card">
           <div className="auth-tabs">
             <button className="auth-tab active" type="button">Entrar</button>
-            <button className="auth-tab" type="button" onClick={() => (window.location.href = "/usuarios")}>Cadastrar</button>
+            <button className="auth-tab" type="button" onClick={() => (window.location.href = "/register")}>Cadastrar</button>
           </div>
           <form onSubmit={entrar} style={{ display: "grid", gap: 12 }}>
             <label className="auth-field">
