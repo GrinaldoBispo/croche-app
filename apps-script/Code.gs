@@ -1,6 +1,6 @@
 var TABELAS_PADRAO = {
   MARCAS: ["id","nome"],
-  LINHAS: ["id","marca","nome_linha","cor","peso_novelo_g","preco_pago","preco_por_g"],
+  LINHAS: ["id","marca","textura","cor","peso_novelo_g","preco_pago","preco_por_g","quantidade"],
   DIFICULDADES: ["id","nome","fator_multiplicador","descricao"],
   RECEITAS: ["id","nome_item","linha_usada","peso_necessario_g","dificuldade_id","valor_base_g","margem_pct"],
   USUARIOS: ["id","nome","email","senha_hash","papel","ativo","spreadsheet_url","criado_em"],
@@ -139,10 +139,28 @@ function migrarTabelas(ss) {
     if (!aba) { out.push(n + ":ausente_rode_seed"); return; }
     var atual = aba.getRange(1,1,1,Math.max(aba.getLastColumn(),1)).getValues()[0].filter(function(h){return h;});
     var falta = TABELAS_PADRAO[n].filter(function(h){return atual.indexOf(h) === -1;});
-    if (falta.length === 0) { out.push(n + ":ok"); return; }
-    aba.getRange(1,atual.length+1,1,falta.length).setValues([falta]);
-    aba.getRange(1,atual.length+1,1,falta.length).setFontWeight("bold");
-    out.push(n + ":+ " + falta.join(","));
+    if (falta.length === 0) { out.push(n + ":ok"); }
+    else {
+      aba.getRange(1,atual.length+1,1,falta.length).setValues([falta]);
+      aba.getRange(1,atual.length+1,1,falta.length).setFontWeight("bold");
+      out.push(n + ":+ " + falta.join(","));
+    }
+    if (n === "LINHAS") {
+      try {
+        var h2 = aba.getRange(1,1,1,aba.getLastColumn()).getValues()[0];
+        var iOld = h2.indexOf("nome_linha");
+        var iNew = h2.indexOf("textura");
+        if (iOld >= 0 && iNew >= 0 && aba.getLastRow() > 1) {
+          var vals = aba.getRange(2,1,aba.getLastRow()-1,h2.length).getValues();
+          var mudou = false;
+          for (var r = 0; r < vals.length; r++) {
+            if (!vals[r][iNew] && vals[r][iOld]) { vals[r][iNew] = vals[r][iOld]; mudou = true; }
+          }
+          if (mudou) aba.getRange(2,1,aba.getLastRow()-1,h2.length).setValues(vals);
+          if (mudou) out.push("LINHAS:nome_linha->textura copiado");
+        }
+      } catch (e2) { out.push("LINHAS:migrate_textura_erro " + e2.toString()); }
+    }
   });
   return out;
 }

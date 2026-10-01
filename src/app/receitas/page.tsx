@@ -6,7 +6,7 @@ const input: React.CSSProperties = { width: "100%", minHeight: 44, fontSize: 16,
 const btn: React.CSSProperties = { minHeight: 48, fontSize: 16, fontWeight: 600 };
 
 export default function ReceitasPage() {
-  const [linhas, setLinhas] = useState<Array<{ id: string; nome_linha?: string }>>([]);
+  const [linhas, setLinhas] = useState<Array<{ id: string; textura?: string; nome_linha?: string; cor?: string; marca?: string }>>([]);
   const [difs, setDifs] = useState<Array<{ id: string; nome?: string }>>([]);
   const [lista, setLista] = useState<Array<{ id: string; nome_item?: string }>>([]);
   const [form, setForm] = useState({ nome_item: "", linha_usada: "", peso_necessario_g: "", dificuldade_id: "", valor_base_g: "", margem_pct: "" });
@@ -43,7 +43,7 @@ export default function ReceitasPage() {
         <input style={input} placeholder="nome da peça" value={form.nome_item} onChange={(e) => setForm({ ...form, nome_item: e.target.value })} required />
         <select style={input} value={form.linha_usada} onChange={(e) => setForm({ ...form, linha_usada: e.target.value })} required>
           <option value="">linha...</option>
-          {linhas.map((l) => <option key={l.id} value={l.id}>{l.nome_linha}</option>)}
+          {linhas.map((l) => <option key={l.id} value={l.id}>{l.textura || (l as { nome_linha?: string }).nome_linha} - {l.cor} ({l.marca})</option>)}
         </select>
         <select style={input} value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })} required>
           <option value="">dificuldade...</option>
