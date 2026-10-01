@@ -2,7 +2,7 @@ var TABELAS_PADRAO = {
   LINHAS: ["id","marca","nome_linha","cor","peso_novelo_g","preco_pago","preco_por_g"],
   DIFICULDADES: ["id","nome","fator_multiplicador","descricao"],
   RECEITAS: ["id","nome_item","linha_usada","peso_necessario_g","dificuldade_id","valor_base_g","margem_pct"],
-  USUARIOS: ["id","nome","email","ativo","spreadsheet_url","criado_em"],
+  USUARIOS: ["id","nome","email","senha_hash","papel","ativo","spreadsheet_url","criado_em"],
   LOG_ACESSOS: ["id","usuario_id","acao","em"]
 };
 
@@ -12,6 +12,10 @@ function doGet(e) {
     if (p.action === "seed") {
       var ss = p.url ? SpreadsheetApp.openById(extrairIdDaUrl(p.url)) : SpreadsheetApp.getActiveSpreadsheet();
       return json({ status: "success", seed: seedTabelas(ss), planilha: ss.getName() });
+    }
+    if (p.action === "migrate") {
+      var ssM = p.url ? SpreadsheetApp.openById(extrairIdDaUrl(p.url)) : SpreadsheetApp.getActiveSpreadsheet();
+      return json({ status: "success", migrate: migrarTabelas(ssM) });
     }
     if (p.table_name) {
       var ss2 = p.url ? SpreadsheetApp.openById(extrairIdDaUrl(p.url)) : SpreadsheetApp.getActiveSpreadsheet();
@@ -123,6 +127,21 @@ function seedTabelas(ss) {
       aba.getRange(1,1,1,TABELAS_PADRAO[n].length).setFontWeight("bold");
       out.push(n + ":criada");
     } else out.push(n + ":ja_existia");
+  });
+  return out;
+}
+
+function migrarTabelas(ss) {
+  var out = [];
+  Object.keys(TABELAS_PADRAO).forEach(function(n){
+    var aba = ss.getSheetByName(n);
+    if (!aba) { out.push(n + ":ausente_rode_seed"); return; }
+    var atual = aba.getRange(1,1,1,Math.max(aba.getLastColumn(),1)).getValues()[0].filter(function(h){return h;});
+    var falta = TABELAS_PADRAO[n].filter(function(h){return atual.indexOf(h) === -1;});
+    if (falta.length === 0) { out.push(n + ":ok"); return; }
+    aba.getRange(1,atual.length+1,1,falta.length).setValues([falta]);
+    aba.getRange(1,atual.length+1,1,falta.length).setFontWeight("bold");
+    out.push(n + ":+ " + falta.join(","));
   });
   return out;
 }
