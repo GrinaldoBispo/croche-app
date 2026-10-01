@@ -15,6 +15,7 @@
 | /dificuldades | GET | Cadastro de dificuldades |
 | /receitas | GET | Cadastro de receitas (selects de linhas + dificuldades) |
 | /usuarios | GET | Admin: CRUD de usuários |
+| /mais | GET | Hub mobile: Marcas, Dificuldades, Usuários (admin), Sair |
 
 ## Rotas de API
 | Rota | Método | Descrição | Auth |
@@ -32,3 +33,4 @@
 
 ## Fluxos
 Login (`/login`) → cookie `croche_user` → menu `/` por papel → CRUDs via `/api/*` → Apps Script `/exec` → Sheets.
+Navegação mobile: rodapé fixo (Início, Linhas, Receitas, Mais) + topo só marca.

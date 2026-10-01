@@ -35,3 +35,32 @@ Sessão/Comando: /resumo
 - `C:\AEG_Automacao\croche-app\src\app\api\usuarios\route.ts`
 - `C:\AEG_Automacao\croche-app\src\middleware.ts`
 - `C:\AEG_Automacao\croche-app\docs\PROGRESSO.md`
+
+---
+
+# Resumo da Sessão — croche-app (continuação)
+
+Data: 2026-10-01
+Projeto/Pasta: C:\AEG_Automacao\croche-app
+Sessão/Comando: documentar
+
+## Objetivo (Goal)
+- Registrar docs, seed MARCAS e menu inferior mobile.
+
+## Progresso (Progress)
+- Seed `MARCAS:criada` no Apps Script (demais abas preservadas).
+- `C:\AEG_Automacao\croche-app\src\components\nav.tsx`: rodapé fixo mobile + topo só marca.
+- `C:\AEG_Automacao\croche-app\src\app\mais\page.tsx`: hub criado.
+- Docs: README/ROTAS/PLANO/PROGRESSO atualizados.
+
+## Decisões-chave (Key decisions)
+- Navegação mobile por rodapé com ícones; cadastros auxiliares no `/mais`.
+
+## Próximos passos (Next steps)
+- [ ] Calculadora de preço da peça.
+- [ ] Filtro admin refinado + onboarding por URL.
+
+## Arquivos relevantes
+- `C:\AEG_Automacao\croche-app\src\components\nav.tsx`
+- `C:\AEG_Automacao\croche-app\src\app\mais\page.tsx`
+- `C:\AEG_Automacao\croche-app\docs\ROTAS.md`

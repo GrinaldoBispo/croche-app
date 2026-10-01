@@ -24,7 +24,8 @@
 
 ## Fase 3: Cadastros 🟡
 - [x] 2026-10-01 — Linhas (marca via select), Marcas, Dificuldades, Receitas (selects), edição usuário por clique
-- [ ] Aguardando colar Code.gs com MARCAS no Apps Script + rodar seed
+- [x] 2026-10-01 — Aba MARCAS criada via seed (dados anteriores preservados)
+- [x] 2026-10-01 — Menu inferior mobile (Início/Linhas/Receitas/Mais) + hub `/mais`
 
 ---
 
@@ -47,7 +48,5 @@
 ## Changelog Recente
 
 ### 2026-10-01
-- ✅ Login com senha + papel admin/user
-- ✅ Rotas protegidas + register público
-- ✅ Menu por papel (user só Linhas/Marcas/Dificuldades/Receitas)
-- 🟡 MARCAS no código, pendente deploy do Apps Script
+- ✅ MARCAS criada via seed
+- ✅ Menu inferior mobile + `/mais`
