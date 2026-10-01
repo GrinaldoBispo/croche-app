@@ -8,7 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <body style={{ fontFamily: "system-ui", margin: 0 }}>
         <Nav />
-        {children}
+        <div style={{ paddingBottom: 84 }}>{children}</div>
       </body>
     </html>
   );
