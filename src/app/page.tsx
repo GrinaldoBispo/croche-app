@@ -3,7 +3,7 @@ export default function Home() {
   const btn: React.CSSProperties = { display: "block", minHeight: 48, lineHeight: "48px", textAlign: "center", border: "1px solid #ddd", borderRadius: 8, textDecoration: "none", color: "inherit", fontSize: 16, fontWeight: 600 };
   return (
     <main style={box}>
-      <h1 style={{ margin: 0 }}>croche-app</h1>
+      <h1 style={{ margin: 0 }}>Croche App</h1>
       <a style={btn} href="/login">Entrar</a>
       <a style={btn} href="/linhas">Linhas</a>
       <a style={btn} href="/usuarios">Usuários</a>

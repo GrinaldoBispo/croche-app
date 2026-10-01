@@ -55,7 +55,7 @@ export default function LoginPage() {
       `}</style>
       <div className="auth-wrap">
         <div className="auth-brand">
-          <h1>croche-app</h1>
+          <h1>Croche App</h1>
           <p>Cadastre linhas e calcule o preço das peças em segundos.</p>
         </div>
         <div className="auth-card">
