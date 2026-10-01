@@ -89,7 +89,7 @@ export default function DificuldadesPage() {
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 8 }}>
         {lista.map((d) => (
           <li key={d.id} onClick={() => editar(d)} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, cursor: "pointer" }}>
-            {d.nome} · ×{fmtBR(d.fator_multiplicador)}
+            {d.nome} - {fmtBR(d.fator_multiplicador)}
             <br /><small>toque para editar</small>
           </li>
         ))}

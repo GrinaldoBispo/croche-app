@@ -1,6 +1,6 @@
 # CHECKPOINT — croche-app
 - Data: 2026-10-01
-- Feito: marcas+dificuldades modelo clean, virgula fator corrigida
-- Onde: `src/app/marcas/page.tsx`, `src/app/dificuldades/page.tsx`
-- Próximo: receitas modelo clean, commit+push
+- Feito: receitas multi-cor (checkbox Cor·Textura·Marca) + edit clean
+- Onde: `src/app/receitas/page.tsx` linha_usada csv, sem mudar Code.gs
+- Próximo: testar receita 2 cores, commit+push, calculadora rateio R$/g
 - Bloqueio: nenhum
