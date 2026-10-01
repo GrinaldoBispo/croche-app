@@ -104,8 +104,8 @@ export default function ReceitasPage() {
       <h1 style={{ margin: 0 }}>Receitas</h1>
       <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
         <input style={input} placeholder="nome da peça" value={form.nome_item} onChange={(e) => setForm({ ...form, nome_item: e.target.value })} required />
-        <select style={input} value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })} required>
-          <option value="">dificuldade...</option>
+        <select style={input} value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })}>
+          <option value="">dificuldade (opcional)...</option>
           {difs.map((d) => <option key={d.id} value={d.id}>{d.nome}</option>)}
         </select>
         <fieldset style={{ border: "1px solid #ddd", borderRadius: 8, padding: 8, display: "grid", gap: 8, margin: 0 }}>
@@ -117,9 +117,9 @@ export default function ReceitasPage() {
             </label>
           ))}
         </fieldset>
-        <input style={input} placeholder="peso necessário total (g)" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} required />
-        <input style={input} placeholder="valor base/g mão de obra" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} required />
-        <input style={input} placeholder="margem % (ex: 20)" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
+        <input style={input} placeholder="peso referência total (g, opcional)" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} />
+        <input style={input} placeholder="valor base/g mão de obra (opcional)" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} />
+        <input style={input} placeholder="margem % (opcional, ex: 20)" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
         <button style={btn} type="submit">{editId ? "Atualizar receita" : "Salvar receita"}</button>
         {editId && (
           <>
