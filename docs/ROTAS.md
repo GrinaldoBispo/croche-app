@@ -13,9 +13,10 @@
 | /linhas | GET | Cadastro de linhas (marca via select de MARCAS) |
 | /marcas | GET | Cadastro de marcas |
 | /dificuldades | GET | Cadastro de dificuldades |
-| /receitas | GET | Cadastro de receitas (selects de linhas + dificuldades) |
+| /receitas | GET | Cadastro de receitas (multi-cor checkbox + selects) |
+| /precificacao | GET | Precificação por cor (peso usado, divide fator, opcionais) |
 | /usuarios | GET | Admin: CRUD de usuários |
-| /mais | GET | Hub mobile: Marcas, Dificuldades, Usuários (admin), Sair |
+| /mais | GET | Hub mobile: Marcas, Dificuldades, Precificação, Usuários (admin), Sair |
 
 ## Rotas de API
 | Rota | Método | Descrição | Auth |

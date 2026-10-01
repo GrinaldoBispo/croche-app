@@ -24,6 +24,7 @@ export default function MaisPage() {
       <h1 style={{ margin: 0 }}>Mais</h1>
       <a style={btn} href="/marcas">🏷️ Marcas</a>
       <a style={btn} href="/dificuldades">📊 Dificuldades</a>
+      <a style={btn} href="/precificacao">💰 Precificação</a>
       {papel === "admin" && <a style={btn} href="/usuarios">👥 Usuários</a>}
       <button style={{ ...btn, background: "#fff", cursor: "pointer" }} onClick={sair}>Sair</button>
     </main>
