@@ -85,7 +85,9 @@ export default function PrecificacaoPage() {
       const rgSim = numBR(sim[id] || "");
       const rgEf = rgSim > 0 ? rgSim : rg;
       const peso = numBR(pesos[id] || "");
-      return { id, label: l ? labelLinha(l) : id, rg, rgEf, peso, custo: rgEf * peso };
+      const roloG = l ? Number(l.peso_novelo_g || 0) : 0;
+      const pago = l ? Number(l.preco_pago || 0) : 0;
+      return { id, label: l ? labelLinha(l) : id, rg, rgEf, peso, custo: rgEf * peso, roloG, pago };
     });
     const material = itens.reduce((s, x) => s + x.custo, 0);
     const pesoTotal = itens.reduce((s, x) => s + x.peso, 0);
@@ -122,14 +124,14 @@ export default function PrecificacaoPage() {
           {calc?.itens.map((it) => (
             <div key={it.id} style={card}>
               <strong>{it.label}</strong>
-              <small>R$/g estoque: {it.rg.toFixed(4).replace(".", ",")}</small>
-              <input style={input} placeholder="peso usado (g)" inputMode="decimal" value={pesos[it.id] || ""} onChange={(e) => setPesos({ ...pesos, [it.id]: e.target.value })} />
+              <small>Rolo: {String(it.roloG).replace(".", ",")}g por {money(it.pago)} (R$/g {it.rg.toFixed(4).replace(".", ",")})</small>
+              <input style={input} placeholder="peso usado nessa peça (g)" inputMode="decimal" value={pesos[it.id] || ""} onChange={(e) => setPesos({ ...pesos, [it.id]: e.target.value })} />
               <input style={input} placeholder="simular R$/g (opcional)" inputMode="decimal" value={sim[it.id] || ""} onChange={(e) => setSim({ ...sim, [it.id]: e.target.value })} />
               <span>Custo: {money(it.custo)}</span>
             </div>
           ))}
           <div style={card}>
-            <span>Peso total: {String(calc ? calc.pesoTotal : 0).replace(".", ",")}g</span>
+            <span>Peso usado total: {String(calc ? calc.pesoTotal : 0).replace(".", ",")}g</span>
             <span>Material (soma cores): {money(calc ? calc.material : 0)}</span>
             <span>Mão de obra: {money(calc ? calc.mao : 0)}</span>
             <span>Dificuldade: {calc?.difNome} (÷ {String(calc?.fator ?? 1).replace(".", ",")})</span>
