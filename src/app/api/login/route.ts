@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const { email, senha } = await req.json();
     if (!email || !senha) return NextResponse.json({ status: "error", message: "email e senha obrigatórios" }, { status: 400 });
 
-    const base = await appsScriptGet({ table_name: "USUARIOS", limit: "500" });
+    const base = await appsScriptGet({ table_name: "USUARIOS", limit: "200" });
     const lista = (base.data || []) as Array<{ id: string; email?: string; nome?: string; ativo?: string; papel?: string; senha_hash?: string }>;
     const user = lista.find((u) => String(u.email || "").toLowerCase() === String(email).toLowerCase());
 
@@ -16,11 +16,12 @@ export async function POST(req: Request) {
     if (!user.senha_hash || user.senha_hash !== hashSenha(email, String(senha)))
       return NextResponse.json({ status: "error", message: "senha inválida" }, { status: 401 });
 
-    await appsScriptPost({
+    // LOG_ACESSOS em segundo plano: não bloqueia o login (Apps Script frio é lento)
+    appsScriptPost({
       action: "create",
       table_name: "LOG_ACESSOS",
       data: { usuario_id: user.id, acao: "login", em: new Date().toISOString() },
-    });
+    }).catch(() => {});
 
     const papel = user.papel || "user";
     const res = NextResponse.json({ status: "success", id: user.id, nome: user.nome, papel });

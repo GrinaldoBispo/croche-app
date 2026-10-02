@@ -20,7 +20,14 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
       });
-      const j = await r.json();
+      const texto = await r.text();
+      let j: { status?: string; nome?: string; message?: string } = {};
+      try {
+        j = JSON.parse(texto);
+      } catch {
+        setMsg(`servidor retornou HTML (HTTP ${r.status}) — confira o deploy`);
+        return;
+      }
       if (j.status === "success") {
         setOk(true);
         setMsg(`Bem-vindo, ${j.nome}!`);
