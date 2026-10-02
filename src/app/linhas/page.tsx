@@ -119,15 +119,33 @@ export default function LinhasPage() {
     <main className="container">
       <h1 style={{ margin: 0 }}>Linhas</h1>
       <form onSubmit={salvar} className="card">
-        <select className="input" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required>
-          <option value="">marca...</option>
-          {marcas.map((m) => <option key={m.id} value={m.nome}>{m.nome}</option>)}
-        </select>
-        <input className="input" placeholder="textura da linha (ex: Anne, Barroco)" value={form.textura} onChange={(e) => setForm({ ...form, textura: e.target.value })} required />
-        <input className="input" placeholder="cor" value={form.cor} onChange={(e) => setForm({ ...form, cor: e.target.value })} required />
-        <input className="input" placeholder="peso novelo (g)" inputMode="decimal" value={form.peso_novelo_g} onChange={(e) => setForm({ ...form, peso_novelo_g: e.target.value })} required />
-        <input className="input" placeholder="preço pago (R$)" inputMode="decimal" value={form.preco_pago} onChange={(e) => setForm({ ...form, preco_pago: e.target.value })} required />
-        <input className="input" placeholder="quantidade (estoque novelos)" inputMode="numeric" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} required />
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Marca</span>
+          <select className="input" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required>
+            <option value="">marca...</option>
+            {marcas.map((m) => <option key={m.id} value={m.nome}>{m.nome}</option>)}
+          </select>
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Textura</span>
+          <input className="input" placeholder="ex: Anne, Barroco" value={form.textura} onChange={(e) => setForm({ ...form, textura: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Cor</span>
+          <input className="input" placeholder="ex: Vermelho" value={form.cor} onChange={(e) => setForm({ ...form, cor: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Peso do novelo (g)</span>
+          <input className="input" placeholder="ex: 500" inputMode="decimal" value={form.peso_novelo_g} onChange={(e) => setForm({ ...form, peso_novelo_g: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Preço pago (R$)</span>
+          <input className="input" placeholder="ex: 28,90" inputMode="decimal" value={form.preco_pago} onChange={(e) => setForm({ ...form, preco_pago: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Quantidade em estoque</span>
+          <input className="input" placeholder="nº de novelos" inputMode="numeric" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} required />
+        </label>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar linha" : "Salvar linha"}</button>
         {editId && (
           <>

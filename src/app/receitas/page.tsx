@@ -98,11 +98,17 @@ export default function ReceitasPage() {
     <main className="container">
       <h1 style={{ margin: 0 }}>Receitas</h1>
       <form onSubmit={salvar} className="card">
-        <input className="input" placeholder="nome da peça" value={form.nome_item} onChange={(e) => setForm({ ...form, nome_item: e.target.value })} required />
-        <select className="input" value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })}>
-          <option value="">dificuldade (opcional)...</option>
-          {difs.map((d) => <option key={d.id} value={d.id}>{d.nome}</option>)}
-        </select>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Nome da peça</span>
+          <input className="input" placeholder="ex: Sousplat" value={form.nome_item} onChange={(e) => setForm({ ...form, nome_item: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Dificuldade</span>
+          <select className="input" value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })}>
+            <option value="">dificuldade (opcional)...</option>
+            {difs.map((d) => <option key={d.id} value={d.id}>{d.nome}</option>)}
+          </select>
+        </label>
         <fieldset style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 8, display: "grid", gap: 8, margin: 0, minWidth: 0 }}>
           <legend style={{ fontSize: 14, color: "var(--muted)" }}>Linhas — pode marcar várias ({sel.length})</legend>
           {linhas.map((l) => (
@@ -112,9 +118,18 @@ export default function ReceitasPage() {
             </label>
           ))}
         </fieldset>
-        <input className="input" placeholder="peso referência total (g, opcional)" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} />
-        <input className="input" placeholder="valor base/g mão de obra (opcional)" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} />
-        <input className="input" placeholder="margem % (opcional, ex: 20)" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Peso referência total (g)</span>
+          <input className="input" placeholder="opcional" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Valor base/g mão de obra</span>
+          <input className="input" placeholder="opcional" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Margem (%)</span>
+          <input className="input" placeholder="ex: 20" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
+        </label>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar receita" : "Salvar receita"}</button>
         {editId && (
           <>

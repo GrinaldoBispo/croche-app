@@ -79,14 +79,20 @@ export default function LoginPage() {
             <button className="auth-tab" type="button" onClick={() => (window.location.href = "/register")}>Cadastrar</button>
           </div>
           <form onSubmit={entrar} className="auth-form">
-            <label className="auth-field">
-              <input placeholder="Seu email" type="text" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#71717a" }}>Email</span>
+              <span className="auth-field">
+                <input placeholder="Seu email" type="text" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </span>
             </label>
-            <label className="auth-field">
-              <input placeholder="Senha" type={show ? "text" : "password"} autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} />
-              <button type="button" onClick={() => setShow(!show)} style={{ border: 0, background: "transparent", cursor: "pointer", flexShrink: 0 }}>
-                {show ? "🙈" : "👁"}
-              </button>
+            <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#71717a" }}>Senha</span>
+              <span className="auth-field">
+                <input placeholder="Senha" type={show ? "text" : "password"} autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} />
+                <button type="button" onClick={() => setShow(!show)} style={{ border: 0, background: "transparent", cursor: "pointer", flexShrink: 0 }}>
+                  {show ? "🙈" : "👁"}
+                </button>
+              </span>
             </label>
             <button className="auth-btn" type="submit" disabled={loading}>{loading ? "Conectando..." : "Entrar"}</button>
           </form>

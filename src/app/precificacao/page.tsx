@@ -108,18 +108,30 @@ export default function PrecificacaoPage() {
   return (
     <main className="container">
       <h1 style={{ margin: 0 }}>Precificação</h1>
-      <select className="input" value={receitaId} onChange={(e) => escolherReceita(e.target.value)}>
-        <option value="">receita...</option>
-        {receitas.map((r) => <option key={r.id} value={r.id}>{r.nome_item}</option>)}
-      </select>
+      <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Receita</span>
+        <select className="input" value={receitaId} onChange={(e) => escolherReceita(e.target.value)}>
+          <option value="">receita...</option>
+          {receitas.map((r) => <option key={r.id} value={r.id}>{r.nome_item}</option>)}
+        </select>
+      </label>
       {receita && (
         <>
-          <select className="input" value={difId} onChange={(e) => setDifId(e.target.value)}>
-            <option value="">dificuldade (divide)...</option>
-            {difs.map((d) => <option key={d.id} value={d.id}>{d.nome} - {String(d.fator_multiplicador ?? "").replace(".", ",")}</option>)}
-          </select>
-          <input className="input" placeholder="mão de obra valor base/g (opcional)" inputMode="decimal" value={valorBase} onChange={(e) => setValorBase(e.target.value)} />
-          <input className="input" placeholder="margem % (opcional, ex: 20)" inputMode="decimal" value={margem} onChange={(e) => setMargem(e.target.value)} />
+          <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Dificuldade</span>
+            <select className="input" value={difId} onChange={(e) => setDifId(e.target.value)}>
+              <option value="">dificuldade (divide)...</option>
+              {difs.map((d) => <option key={d.id} value={d.id}>{d.nome} - {String(d.fator_multiplicador ?? "").replace(".", ",")}</option>)}
+            </select>
+          </label>
+          <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Mão de obra — valor base/g</span>
+            <input className="input" placeholder="opcional" inputMode="decimal" value={valorBase} onChange={(e) => setValorBase(e.target.value)} />
+          </label>
+          <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Margem (%)</span>
+            <input className="input" placeholder="ex: 20" inputMode="decimal" value={margem} onChange={(e) => setMargem(e.target.value)} />
+          </label>
           {calc?.itens.map((it) => (
             <div key={it.id} className="card">
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
@@ -133,8 +145,14 @@ export default function PrecificacaoPage() {
                 </div>
               </div>
               <small style={{ color: "var(--muted)" }}>Rolo: {String(it.roloG).replace(".", ",")}g por {money(it.pago)} (R$/g {it.rg.toFixed(4).replace(".", ",")})</small>
-              <input className="input" placeholder="peso usado nessa peça (g)" inputMode="decimal" value={pesos[it.id] || ""} onChange={(e) => setPesos({ ...pesos, [it.id]: e.target.value })} />
-              <input className="input" placeholder="simular R$/g (opcional)" inputMode="decimal" value={sim[it.id] || ""} onChange={(e) => setSim({ ...sim, [it.id]: e.target.value })} />
+              <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Peso usado nessa peça (g)</span>
+                <input className="input" placeholder="ex: 120" inputMode="decimal" value={pesos[it.id] || ""} onChange={(e) => setPesos({ ...pesos, [it.id]: e.target.value })} />
+              </label>
+              <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Simular R$/g</span>
+                <input className="input" placeholder="opcional" inputMode="decimal" value={sim[it.id] || ""} onChange={(e) => setSim({ ...sim, [it.id]: e.target.value })} />
+              </label>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                 <span style={{ color: "var(--muted)", fontSize: 14 }}>Custo</span>
                 <span className="price">{money(it.custo)}</span>

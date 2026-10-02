@@ -49,7 +49,10 @@ export default function MarcasPage() {
     <main className="container">
       <h1 style={{ margin: 0 }}>Marcas</h1>
       <form onSubmit={salvar} className="card">
-        <input className="input" placeholder="nome da marca" value={nome} onChange={(e) => setNome(e.target.value)} required />
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Nome da marca</span>
+          <input className="input" placeholder="ex: Círculo" value={nome} onChange={(e) => setNome(e.target.value)} required />
+        </label>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar marca" : "Salvar marca"}</button>
         {editId && (
           <>

@@ -81,14 +81,29 @@ export default function UsuariosPage() {
     <main className="container">
       <h1 style={{ margin: 0 }}>Usuários</h1>
       <form onSubmit={salvar} className="card">
-        <input className="input" placeholder="nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
-        <input className="input" placeholder="email" inputMode="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-        <input className="input" placeholder={editId ? "nova senha (vazio mantém)" : "senha"} type="password" value={form.senha} onChange={(e) => setForm({ ...form, senha: e.target.value })} required={!editId} />
-        <select className="input" value={form.papel} onChange={(e) => setForm({ ...form, papel: e.target.value })}>
-          <option value="admin">admin</option>
-          <option value="user">user</option>
-        </select>
-        <input className="input" placeholder="url da planilha do cliente (opcional)" inputMode="url" value={form.spreadsheet_url} onChange={(e) => setForm({ ...form, spreadsheet_url: e.target.value })} />
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Nome</span>
+          <input className="input" placeholder="nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Email</span>
+          <input className="input" placeholder="email" inputMode="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Senha</span>
+          <input className="input" placeholder={editId ? "nova senha (vazio mantém)" : "senha"} type="password" value={form.senha} onChange={(e) => setForm({ ...form, senha: e.target.value })} required={!editId} />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Papel</span>
+          <select className="input" value={form.papel} onChange={(e) => setForm({ ...form, papel: e.target.value })}>
+            <option value="admin">admin</option>
+            <option value="user">user</option>
+          </select>
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Planilha do cliente (URL)</span>
+          <input className="input" placeholder="opcional" inputMode="url" value={form.spreadsheet_url} onChange={(e) => setForm({ ...form, spreadsheet_url: e.target.value })} />
+        </label>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar usuário" : "Salvar usuário"}</button>
         {editId && (
           <>

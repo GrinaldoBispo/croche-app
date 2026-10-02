@@ -70,9 +70,18 @@ export default function DificuldadesPage() {
     <main className="container">
       <h1 style={{ margin: 0 }}>Dificuldades</h1>
       <form onSubmit={salvar} className="card">
-        <input className="input" placeholder="nome (ex: Fácil)" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
-        <input className="input" placeholder="fator (ex: 1,3)" inputMode="decimal" value={form.fator_multiplicador} onChange={(e) => setForm({ ...form, fator_multiplicador: e.target.value })} required />
-        <input className="input" placeholder="descrição" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} />
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Nome</span>
+          <input className="input" placeholder="ex: Fácil" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Fator (divide o preço)</span>
+          <input className="input" placeholder="ex: 1,3" inputMode="decimal" value={form.fator_multiplicador} onChange={(e) => setForm({ ...form, fator_multiplicador: e.target.value })} required />
+        </label>
+        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Descrição</span>
+          <input className="input" placeholder="opcional" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} />
+        </label>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar dificuldade" : "Salvar dificuldade"}</button>
         {editId && (
           <>
