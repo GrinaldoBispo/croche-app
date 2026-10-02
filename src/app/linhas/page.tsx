@@ -128,7 +128,7 @@ export default function LinhasPage() {
         </label>
         <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
           <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Textura</span>
-          <input className="input" placeholder="ex: Anne, Barroco" value={form.textura} onChange={(e) => setForm({ ...form, textura: e.target.value })} required />
+          <input className="input" placeholder="ex: 6, 8, 10" inputMode="numeric" value={form.textura} onChange={(e) => setForm({ ...form, textura: e.target.value })} required />
         </label>
         <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
           <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Cor</span>
