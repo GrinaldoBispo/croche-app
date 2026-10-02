@@ -1,38 +1,78 @@
 "use client";
 import { useEffect, useState } from "react";
 
+async function lerJsonSeguro(r: Response) {
+  const texto = await r.text();
+  try {
+    return JSON.parse(texto);
+  } catch {
+    return null;
+  }
+}
+
 export default function Home() {
   const [papel, setPapel] = useState<string | null>(null);
+  const [linhas, setLinhas] = useState<number | null>(null);
+  const [receitas, setReceitas] = useState<number | null>(null);
+  const [estoque, setEstoque] = useState<number | null>(null);
 
   useEffect(() => {
     fetch("/api/me", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => setPapel(j?.papel || null))
       .catch(() => setPapel(null));
+
+    Promise.all([
+      fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }).then(async (r) => (r.ok ? lerJsonSeguro(r) : null)),
+      fetch("/api/receitas?limit=200", { cache: "no-store" }).then(async (r) => (r.ok ? lerJsonSeguro(r) : null)),
+    ])
+      .then(([jl, jr]) => {
+        const ll = (jl?.data || []) as Array<{ quantidade?: number }>;
+        setLinhas(jl?.total ?? ll.length ?? 0);
+        setEstoque(ll.reduce((s, l) => s + Number(l.quantidade || 0), 0));
+        const lr = (jr?.data || []) as unknown[];
+        setReceitas(jr?.total ?? lr.length ?? 0);
+      })
+      .catch(() => {
+        setLinhas(0);
+        setReceitas(0);
+        setEstoque(0);
+      });
   }, []);
 
-  const box: React.CSSProperties = { maxWidth: 480, margin: "0 auto", padding: 16, display: "grid", gap: 12 };
-  const btn: React.CSSProperties = { display: "block", minHeight: 48, lineHeight: "48px", textAlign: "center", border: "1px solid #ddd", borderRadius: 8, textDecoration: "none", color: "inherit", fontSize: 16, fontWeight: 600 };
-
   return (
-    <main style={box}>
-      <h1 style={{ margin: 0 }}>Croche App</h1>
+    <main className="container">
+      <section className="welcome">
+        <div>
+          <h1>Olá, artesã</h1>
+          <p>O que vamos criar hoje?</p>
+        </div>
+        <div className="actions">
+          <a className="btn" href="/precificacao">+ Nova precificação</a>
+          <a className="btn" href="/linhas">+ Nova linha</a>
+        </div>
+      </section>
+
+      <div className="row-2">
+        <div className="card" style={{ alignContent: "center" }}>
+          <span className="badge badge-primary">estoque</span>
+          <strong className="price">{linhas === null ? "…" : linhas} linhas</strong>
+          <small style={{ color: "var(--muted)" }}>{estoque === null ? "carregando…" : `${estoque} novelos`}</small>
+        </div>
+        <div className="card" style={{ alignContent: "center" }}>
+          <span className="badge badge-accent">criações</span>
+          <strong className="price">{receitas === null ? "…" : receitas} receitas</strong>
+          <small style={{ color: "var(--muted)" }}>toque em Receitas p/ ver</small>
+        </div>
+      </div>
+
+      <a className="btn" href="/linhas">Linhas</a>
+      <a className="btn" href="/receitas">Receitas</a>
+      <a className="btn btn-primary" href="/precificacao">Precificação</a>
+      <a className="btn" href="/marcas">Marcas</a>
+      <a className="btn" href="/dificuldades">Dificuldades</a>
       {papel === "admin" && (
-        <>
-          <a style={btn} href="/linhas">Linhas</a>
-          <a style={btn} href="/marcas">Marcas</a>
-          <a style={btn} href="/dificuldades">Dificuldades</a>
-          <a style={btn} href="/receitas">Receitas</a>
-          <a style={btn} href="/usuarios">Usuários</a>
-        </>
-      )}
-      {papel === "user" && (
-        <>
-          <a style={btn} href="/linhas">Linhas</a>
-          <a style={btn} href="/marcas">Marcas</a>
-          <a style={btn} href="/dificuldades">Dificuldades</a>
-          <a style={btn} href="/receitas">Receitas</a>
-        </>
+        <a className="btn" href="/usuarios">Usuários</a>
       )}
     </main>
   );
