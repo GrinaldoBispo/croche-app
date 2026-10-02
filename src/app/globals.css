@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg: #FDF8F5;
+  --surface: #ffffff;
+  --primary: #E07A5F;
+  --primary-dark: #C75F45;
+  --accent: #D97706;
+  --accent-soft: #FEF3C7;
+  --text: #292524;
+  --muted: #78716C;
+  --border: #E7E5E4;
+  --success: #15803D;
+  --success-bg: #DCFCE7;
+  --gold-bg: #FFFBEB;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Container mobile-first 480px */
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.card-click { cursor: pointer; }
+
+/* Botões — mín 48px */
+.btn {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  line-height: 48px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--surface);
+  font-size: 16px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  padding: 0 16px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:active { background: var(--primary-dark); }
+
+/* Inputs — mín 44px */
+.input {
+  width: 100%;
+  min-height: 44px;
+  font-size: 16px;
+  font-family: var(--font);
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+select.input, input.input { min-height: 44px; }
+
+/* Badges / pills */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #F5F5F4;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.badge-primary { background: #FFEBE5; color: var(--primary-dark); border-color: #FECDBD; }
+.badge-accent { background: var(--accent-soft); color: #92400E; border-color: #FDE68A; }
+.badge-success { background: var(--success-bg); color: var(--success); border-color: #BBF7D0; }
+
+/* Novelo / amostra de cor */
+.novelo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  background: conic-gradient(from 200deg, var(--novelo-c, #E7E5E4), #fff, var(--novelo-c, #E7E5E4));
+}
+
+/* Preço em destaque */
+.price {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Banner resultado precificação */
+.result-banner {
+  background: linear-gradient(135deg, #15803D, #CA8A04);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 4px;
+}
+
+.result-banner small { opacity: 0.85; font-size: 13px; }
+.result-banner strong { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+
+/* Barra proporção Material / MO / Margem */
+.ratio-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #F5F5F4;
+}
+.ratio-bar > span { display: block; height: 100%; }
+
+/* Welcome card dashboard */
+.welcome {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 12px;
+}
+.welcome h1 { margin: 0; font-size: 22px; }
+.welcome p { margin: 0; opacity: 0.9; font-size: 14px; }
+.welcome .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.welcome .actions .btn { line-height: 44px; min-height: 44px; background: #fff; color: var(--text); border-color: transparent; font-size: 14px; }
+
+/* Empilhar no mobile — nunca display:none */
+@media (max-width: 760px) {
+  .row-2 { display: grid; grid-template-columns: 1fr; gap: 8px; }
+}
+
+@media (min-width: 761px) {
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+}
