@@ -15,12 +15,22 @@ export default function DificuldadesPage() {
   const [form, setForm] = useState({ nome: "", fator_multiplicador: "", descricao: "" });
   const [editId, setEditId] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
+  const [erro, setErro] = useState(false);
 
   async function carregar() {
-    const r = await fetch("/api/dificuldades?limit=200", { cache: "no-store" });
-    const j = await r.json();
-    setLista(j.data || []);
-    setMsg(`${j.total ?? 0} dificuldade(s)`);
+    setMsg("carregando...");
+    setErro(false);
+    try {
+      const r = await fetch("/api/dificuldades?limit=200", { cache: "no-store" });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      if (j.status === "error") throw new Error(j.message || "erro dificuldades");
+      setLista(j.data || []);
+      setMsg(`${j.total ?? 0} dificuldade(s)`);
+    } catch (e) {
+      setErro(true);
+      setMsg("falha ao carregar — toque em tentar de novo");
+    }
   }
   useEffect(() => { carregar(); }, []);
 
@@ -91,6 +101,9 @@ export default function DificuldadesPage() {
         )}
       </form>
       <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      {erro && (
+        <button className="btn" type="button" onClick={carregar}>Tentar de novo</button>
+      )}
       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((d) => (
           <li key={d.id} onClick={() => editar(d)} className="card card-click">

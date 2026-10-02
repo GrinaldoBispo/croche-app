@@ -22,18 +22,28 @@ export default function ReceitasPage() {
   const [sel, setSel] = useState<string[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
+  const [erro, setErro] = useState(false);
 
   async function carregar() {
-    const [rl, rd, rr] = await Promise.all([
-      fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
-      fetch("/api/dificuldades?limit=200", { cache: "no-store" }),
-      fetch("/api/receitas?limit=200", { cache: "no-store" }),
-    ]);
-    setLinhas(((await rl.json()).data) || []);
-    setDifs(((await rd.json()).data) || []);
-    const j = await rr.json();
-    setLista(j.data || []);
-    setMsg(`${j.total ?? 0} receita(s)`);
+    setMsg("carregando...");
+    setErro(false);
+    try {
+      const [rl, rd, rr] = await Promise.all([
+        fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
+        fetch("/api/dificuldades?limit=200", { cache: "no-store" }),
+        fetch("/api/receitas?limit=200", { cache: "no-store" }),
+      ]);
+      if (!rl.ok || !rd.ok || !rr.ok) throw new Error("falha na rede");
+      setLinhas(((await rl.json()).data) || []);
+      setDifs(((await rd.json()).data) || []);
+      const j = await rr.json();
+      if (j.status === "error") throw new Error(j.message || "erro receitas");
+      setLista(j.data || []);
+      setMsg(`${j.total ?? 0} receita(s)`);
+    } catch (e) {
+      setErro(true);
+      setMsg("falha ao carregar — toque em tentar de novo");
+    }
   }
   useEffect(() => { carregar(); }, []);
 
@@ -139,6 +149,9 @@ export default function ReceitasPage() {
         )}
       </form>
       <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      {erro && (
+        <button className="btn" type="button" onClick={carregar}>Tentar de novo</button>
+      )}
       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((x) => {
           const ids = String(x.linha_usada || "").split(",").map((s) => s.trim()).filter(Boolean);

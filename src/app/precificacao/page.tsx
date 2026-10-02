@@ -39,18 +39,26 @@ export default function PrecificacaoPage() {
   const [margem, setMargem] = useState("");
   const [pesos, setPesos] = useState<Record<string, string>>({});
   const [sim, setSim] = useState<Record<string, string>>({});
+  const [erro, setErro] = useState(false);
 
   async function carregar() {
     setMsg("carregando...");
-    const [rl, rr, rd] = await Promise.all([
-      fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
-      fetch("/api/receitas?limit=200", { cache: "no-store" }),
-      fetch("/api/dificuldades?limit=200", { cache: "no-store" }),
-    ]);
-    setLinhas(((await rl.json()).data) || []);
-    setReceitas(((await rr.json()).data) || []);
-    setDifs(((await rd.json()).data) || []);
-    setMsg("");
+    setErro(false);
+    try {
+      const [rl, rr, rd] = await Promise.all([
+        fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
+        fetch("/api/receitas?limit=200", { cache: "no-store" }),
+        fetch("/api/dificuldades?limit=200", { cache: "no-store" }),
+      ]);
+      if (!rl.ok || !rr.ok || !rd.ok) throw new Error("falha na rede");
+      setLinhas(((await rl.json()).data) || []);
+      setReceitas(((await rr.json()).data) || []);
+      setDifs(((await rd.json()).data) || []);
+      setMsg("");
+    } catch (e) {
+      setErro(true);
+      setMsg("falha ao carregar — toque em tentar de novo");
+    }
   }
   useEffect(() => { carregar(); }, []);
 
@@ -178,6 +186,9 @@ export default function PrecificacaoPage() {
         </>
       )}
       <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      {erro && (
+        <button className="btn" type="button" onClick={carregar}>Tentar de novo</button>
+      )}
     </main>
   );
 }

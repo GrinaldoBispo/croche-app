@@ -18,6 +18,7 @@ const emptyForm = { marca: "", textura: "", cor: "", peso_novelo_g: "", preco_pa
 export default function LinhasPage() {
   const [lista, setLista] = useState<Linha[]>([]);
   const [msg, setMsg] = useState("");
+  const [erro, setErro] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState<string | null>(null);
 
@@ -25,15 +26,23 @@ export default function LinhasPage() {
 
   async function carregar() {
     setMsg("carregando...");
-    const [rl, rm] = await Promise.all([
-      fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
-      fetch("/api/marcas?limit=200", { cache: "no-store" }),
-    ]);
-    const j = await rl.json();
-    const m = await rm.json();
-    setLista(j.data || []);
-    setMarcas(m.data || []);
-    setMsg(j.total === 0 ? "nenhuma linha ainda" : `${j.total} encontrada(s)`);
+    setErro(false);
+    try {
+      const [rl, rm] = await Promise.all([
+        fetch("/api/linhas?table_name=LINHAS&limit=200", { cache: "no-store" }),
+        fetch("/api/marcas?limit=200", { cache: "no-store" }),
+      ]);
+      if (!rl.ok || !rm.ok) throw new Error(`HTTP ${rl.status}/${rm.status}`);
+      const j = await rl.json();
+      const m = await rm.json();
+      if (j.status === "error") throw new Error(j.message || "erro linhas");
+      setLista(j.data || []);
+      setMarcas(m.data || []);
+      setMsg(j.total === 0 ? "nenhuma linha ainda" : `${j.total} encontrada(s)`);
+    } catch (e) {
+      setErro(true);
+      setMsg("falha ao carregar — toque em tentar de novo");
+    }
   }
 
   useEffect(() => {
@@ -155,6 +164,9 @@ export default function LinhasPage() {
         )}
       </form>
       <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      {erro && (
+        <button className="btn" type="button" onClick={carregar}>Tentar de novo</button>
+      )}
       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((l) => {
           const tex = l.textura || l.nome_linha || "—";

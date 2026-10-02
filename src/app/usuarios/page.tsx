@@ -8,15 +8,21 @@ export default function UsuariosPage() {
   const [msg, setMsg] = useState("");
   const [form, setForm] = useState({ nome: "", email: "", senha: "", papel: "user", spreadsheet_url: "" });
   const [editId, setEditId] = useState<string | null>(null);
+  const [erro, setErro] = useState(false);
 
   async function carregar() {
     setMsg("carregando...");
-    const r = await fetch("/api/usuarios?limit=200", { cache: "no-store" });
-    const j = await r.json();
-    if (j.status === "error") setMsg(j.message);
-    else {
+    setErro(false);
+    try {
+      const r = await fetch("/api/usuarios?limit=200", { cache: "no-store" });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      if (j.status === "error") throw new Error(j.message || "erro usuarios");
       setLista(j.data || []);
       setMsg((j.total ?? 0) === 0 ? "nenhum usuário ainda" : `${j.total} encontrado(s)`);
+    } catch (e) {
+      setErro(true);
+      setMsg("falha ao carregar — toque em tentar de novo");
     }
   }
 
@@ -113,6 +119,9 @@ export default function UsuariosPage() {
         )}
       </form>
       <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      {erro && (
+        <button className="btn" type="button" onClick={carregar}>Tentar de novo</button>
+      )}
       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((u) => (
           <li key={u.id} onClick={() => editar(u)} className="card card-click">
