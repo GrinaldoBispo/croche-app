@@ -44,11 +44,11 @@ export default function Home() {
     <main className="container">
       <section className="welcome">
         <div>
-          <h1>Olá, artesã {papel === "admin" && <span className="badge" style={{ background: "rgba(255,255,255,.2)", color: "#fff", borderColor: "transparent" }}>admin</span>}</h1>
+          <h1>Olá, artesã {papel === "admin" && <span className="badge" style={{ background: "#fff", color: "#9A3412", borderColor: "transparent" }}>admin</span>}</h1>
           <p>O que vamos criar hoje?</p>
         </div>
         <div className="actions">
-          <a className="btn" href="/precificacao">+ Nova precificação</a>
+          <a className="btn" href="/receitas">+ Nova receita</a>
           <a className="btn" href="/linhas">+ Nova linha</a>
         </div>
       </section>
@@ -56,12 +56,12 @@ export default function Home() {
       <div className="row-2">
         <a className="card card-click" href="/linhas" style={{ textDecoration: "none", color: "inherit", alignContent: "center" }}>
           <span className="badge badge-primary">estoque</span>
-          <strong className="price">{linhas === null ? "…" : linhas} linhas</strong>
-          <small style={{ color: "var(--muted)" }}>{estoque === null ? "carregando…" : `${estoque} novelos`}</small>
+          <strong className="price">{linhas === null ? "…" : `${linhas} ${linhas === 1 ? "linha" : "linhas"}`}</strong>
+          <small style={{ color: "var(--muted)" }}>{estoque === null ? "carregando…" : `${estoque} ${estoque === 1 ? "novelo" : "novelos"}`}</small>
         </a>
         <a className="card card-click" href="/receitas" style={{ textDecoration: "none", color: "inherit", alignContent: "center" }}>
           <span className="badge badge-accent">criações</span>
-          <strong className="price">{receitas === null ? "…" : receitas} receitas</strong>
+          <strong className="price">{receitas === null ? "…" : `${receitas} ${receitas === 1 ? "receita" : "receitas"}`}</strong>
           <small style={{ color: "var(--muted)" }}>toque p/ ver</small>
         </a>
       </div>
