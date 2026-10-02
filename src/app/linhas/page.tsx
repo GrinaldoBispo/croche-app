@@ -13,10 +13,6 @@ type Linha = {
   quantidade?: number;
 };
 
-const box: React.CSSProperties = { maxWidth: 480, margin: "0 auto", padding: 16, display: "grid", gap: 12 };
-const input: React.CSSProperties = { width: "100%", minHeight: 44, fontSize: 16, padding: "10px 12px", boxSizing: "border-box" };
-const btn: React.CSSProperties = { minHeight: 48, fontSize: 16, fontWeight: 600 };
-
 const emptyForm = { marca: "", textura: "", cor: "", peso_novelo_g: "", preco_pago: "", quantidade: "" };
 
 export default function LinhasPage() {
@@ -120,36 +116,48 @@ export default function LinhasPage() {
   }
 
   return (
-    <main style={box}>
+    <main className="container">
       <h1 style={{ margin: 0 }}>Linhas</h1>
-      <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
-        <select style={input} value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required>
+      <form onSubmit={salvar} className="card">
+        <select className="input" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} required>
           <option value="">marca...</option>
           {marcas.map((m) => <option key={m.id} value={m.nome}>{m.nome}</option>)}
         </select>
-        <input style={input} placeholder="textura da linha (ex: Anne, Barroco)" value={form.textura} onChange={(e) => setForm({ ...form, textura: e.target.value })} required />
-        <input style={input} placeholder="cor" value={form.cor} onChange={(e) => setForm({ ...form, cor: e.target.value })} required />
-        <input style={input} placeholder="peso novelo (g)" inputMode="decimal" value={form.peso_novelo_g} onChange={(e) => setForm({ ...form, peso_novelo_g: e.target.value })} required />
-        <input style={input} placeholder="preço pago (R$)" inputMode="decimal" value={form.preco_pago} onChange={(e) => setForm({ ...form, preco_pago: e.target.value })} required />
-        <input style={input} placeholder="quantidade (estoque novelos)" inputMode="numeric" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} required />
-        <button style={btn} type="submit">{editId ? "Atualizar linha" : "Salvar linha"}</button>
+        <input className="input" placeholder="textura da linha (ex: Anne, Barroco)" value={form.textura} onChange={(e) => setForm({ ...form, textura: e.target.value })} required />
+        <input className="input" placeholder="cor" value={form.cor} onChange={(e) => setForm({ ...form, cor: e.target.value })} required />
+        <input className="input" placeholder="peso novelo (g)" inputMode="decimal" value={form.peso_novelo_g} onChange={(e) => setForm({ ...form, peso_novelo_g: e.target.value })} required />
+        <input className="input" placeholder="preço pago (R$)" inputMode="decimal" value={form.preco_pago} onChange={(e) => setForm({ ...form, preco_pago: e.target.value })} required />
+        <input className="input" placeholder="quantidade (estoque novelos)" inputMode="numeric" value={form.quantidade} onChange={(e) => setForm({ ...form, quantidade: e.target.value })} required />
+        <button className="btn btn-primary" type="submit">{editId ? "Atualizar linha" : "Salvar linha"}</button>
         {editId && (
           <>
-            <button style={btn} type="button" onClick={cancelar}>Cancelar</button>
-            <button style={{ ...btn, color: "red" }} type="button" onClick={excluir}>Excluir</button>
+            <button className="btn" type="button" onClick={cancelar}>Cancelar</button>
+            <button className="btn" style={{ color: "red" }} type="button" onClick={excluir}>Excluir</button>
           </>
         )}
       </form>
-      <p>{msg}</p>
-      <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 8 }}>
+      <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((l) => {
           const tex = l.textura || l.nome_linha || "—";
           return (
-            <li key={l.id} onClick={() => editar(l)} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, cursor: "pointer" }}>
-              <strong>{l.cor || "—"} · {tex} · {l.marca || "—"}</strong>
-              <br />Preço R$ {Number(l.preco_pago || 0).toFixed(2)} · Peso {Number(l.peso_novelo_g || 0)}g · Qtd {Number(l.quantidade ?? 0)}
-              <br />R$/g: {Number(l.preco_por_g || 0).toFixed(4)}
-              <br /><small>toque para editar</small>
+            <li key={l.id} onClick={() => editar(l)} className="card card-click">
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <span className="novelo" title={l.cor || ""} aria-hidden="true" />
+                <div style={{ display: "grid", gap: 4, minWidth: 0 }}>
+                  <strong>{l.cor || "—"} · {tex}</strong>
+                  <span style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    <span className="badge badge-primary">{l.marca || "—"}</span>
+                    <span className="badge badge-accent">{tex}</span>
+                    <span className="badge">qtd {Number(l.quantidade ?? 0)}</span>
+                  </span>
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+                <span className="price">R$ {Number(l.preco_por_g || 0).toFixed(4).replace(".", ",")}/g</span>
+                <small style={{ color: "var(--muted)" }}>R$ {Number(l.preco_pago || 0).toFixed(2).replace(".", ",")} · {Number(l.peso_novelo_g || 0)}g</small>
+              </div>
+              <small style={{ color: "var(--muted)" }}>toque para editar</small>
             </li>
           );
         })}

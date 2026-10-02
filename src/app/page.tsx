@@ -44,7 +44,7 @@ export default function Home() {
     <main className="container">
       <section className="welcome">
         <div>
-          <h1>Olá, artesã</h1>
+          <h1>Olá, artesã {papel === "admin" && <span className="badge" style={{ background: "rgba(255,255,255,.2)", color: "#fff", borderColor: "transparent" }}>admin</span>}</h1>
           <p>O que vamos criar hoje?</p>
         </div>
         <div className="actions">
@@ -54,26 +54,19 @@ export default function Home() {
       </section>
 
       <div className="row-2">
-        <div className="card" style={{ alignContent: "center" }}>
+        <a className="card card-click" href="/linhas" style={{ textDecoration: "none", color: "inherit", alignContent: "center" }}>
           <span className="badge badge-primary">estoque</span>
           <strong className="price">{linhas === null ? "…" : linhas} linhas</strong>
           <small style={{ color: "var(--muted)" }}>{estoque === null ? "carregando…" : `${estoque} novelos`}</small>
-        </div>
-        <div className="card" style={{ alignContent: "center" }}>
+        </a>
+        <a className="card card-click" href="/receitas" style={{ textDecoration: "none", color: "inherit", alignContent: "center" }}>
           <span className="badge badge-accent">criações</span>
           <strong className="price">{receitas === null ? "…" : receitas} receitas</strong>
-          <small style={{ color: "var(--muted)" }}>toque em Receitas p/ ver</small>
-        </div>
+          <small style={{ color: "var(--muted)" }}>toque p/ ver</small>
+        </a>
       </div>
 
-      <a className="btn" href="/linhas">Linhas</a>
-      <a className="btn" href="/receitas">Receitas</a>
-      <a className="btn btn-primary" href="/precificacao">Precificação</a>
-      <a className="btn" href="/marcas">Marcas</a>
-      <a className="btn" href="/dificuldades">Dificuldades</a>
-      {papel === "admin" && (
-        <a className="btn" href="/usuarios">Usuários</a>
-      )}
+      <a className="btn btn-primary" href="/precificacao">Calcular preço de peça</a>
     </main>
   );
 }
