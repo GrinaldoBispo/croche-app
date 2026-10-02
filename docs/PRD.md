@@ -16,11 +16,11 @@ App simples para artesã de crochê cadastrar linhas (marca, peso, preço pago),
 ## 4. Funcionalidades
 | # | Funcionalidade | Prioridade | Descrição |
 |---|----------------|------------|-----------|
-| 1 | Cadastro de linhas com id | Alta | marca, nome_linha, cor, peso_novelo_g, preco_pago, preco_por_g auto, id único |
+| 1 | Cadastro de linhas com id | Alta | marca, textura (ex-nome_linha), cor, peso_novelo_g, preco_pago, preco_por_g auto, quantidade estoque, id único |
 | 2 | Cadastro de dificuldades | Alta | id, nome (ex: Fácil/Médio/Difícil/Extra), fator_multiplicador (ex: 1.0/1.3/1.6), descricao. Editável pela artesã |
 | 3 | Listagem/filtro de linhas | Alta | tabela + busca por marca/nome, via GET com limit default 200 |
-| 4 | Cadastro de receitas/modelos | Alta | nome_item, linha_usada (id), peso_necessario_g, dificuldade_id, valor_base_g, margem_pct |
-| 5 | Calculadora de preço | Alta | custo_material = peso_necessario_g * preco_por_g; mao_obra = valor_base_g * peso_necessario_g * fator_dificuldade; preco_final = (custo_material + mao_obra) * (1 + margem_pct) |
+| 4 | Cadastro de receitas/modelos | Alta | nome_item, linha_usada csv multi-cor (ids), peso_necessario_g referência opcional, dificuldade_id/valor_base_g/margem_pct opcionais (reais na /precificacao) |
+| 5 | Calculadora de preço (/precificacao, só calcula) | Alta | custo_cor = R$/g_efetivo * peso_usado (efetivo = simulado ou estoque preco_pago/peso_novelo_g); material = soma cores; mao_obra = valor_base_g * peso_total (opcional); final = (material + mao_obra) / fator_dificuldade * (1 + margem_pct/100) — dificuldade DIVIDE, margem opcional |
 | 6 | Persistência via Sheets com id estável | Alta | create/update/delete por `id`, nunca por nº da linha. `_lineIndex` só interno |
 
 ## 5. Requisitos Não-Funcionais

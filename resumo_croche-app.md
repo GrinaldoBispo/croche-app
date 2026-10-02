@@ -64,3 +64,41 @@ Sessão/Comando: documentar
 - `C:\AEG_Automacao\croche-app\src\components\nav.tsx`
 - `C:\AEG_Automacao\croche-app\src\app\mais\page.tsx`
 - `C:\AEG_Automacao\croche-app\docs\ROTAS.md`
+
+---
+
+# Resumo da Sessão — croche-app (continuação)
+
+Data: 2026-10-02
+Sessão: clone + linhas/precificação
+
+## Objetivo (Goal)
+- Clonar `GrinaldoBispo/croche-app`, tornar listas editáveis no modelo clean (toque p/ editar) e criar `/precificacao` por cor.
+
+## Progresso (Progress)
+- Clone em `C:\AEG_Automacao\croche-app` + migrate `/exec` OK (`LINHAS:+ textura,quantidade`, `nome_linha->textura copiado`); CRUD create/update/delete por id validado.
+- `apps-script/Code.gs`: LINHAS `["id","marca","textura","cor","peso_novelo_g","preco_pago","preco_por_g","quantidade"]` + migrate copia `nome_linha->textura`.
+- `/linhas`, `/marcas`, `/dificuldades`, `/receitas`: modelo clean igual `/usuarios` (clique no card, `Atualizar/Cancelar/Excluir` no form).
+- `/linhas`: card `Cor · Textura · Marca` + `Preço · Peso · Qtd` + `R$/g`; `/dificuldades`: card `nome - fator`, vírgula `1,3` corrigida (`numBR`); `/receitas`: multi-cor checkbox (`linha_usada` csv) + receita enxuta (só nome+linhas obrig).
+- `/precificacao` (nova, só calcula): peso usado por cor, `custo_cor = R$/g_efetivo × peso`, `final = (material + MO) / fator × (1+margem)` — dificuldade DIVIDE, MO/margem/R$/g simulado opcionais; card mostra `Rolo: Xg por R$Y`.
+- Docs: PRD 1/4/5 + ROTAS + CHECKPOINT atualizados.
+- Commits: `956f8c9`, `757add4`, `7baa3e5`, `b6e7cdf`, `900be73`, `cdb3c08`, `eded1aa` push na `main`.
+
+## Decisões-chave (Key decisions)
+- Rename total `nome_linha->textura` com cópia automática no migrate (coluna antiga preservada).
+- Receita guarda quais cores; gasto por cor só na `/precificacao` (sem salvar, MVP).
+- Dificuldade divide (ajuste do fator feito pelo usuário); média arredondada não serve p/ conferência — usar R$/g exato.
+
+## Próximos passos (Next steps)
+- [ ] Commit+push docs (PRD/CHECKPOINT/resumo).
+- [ ] Testar precificação 3 cores (ex: 26g+113g+...=294g, ÷1,16).
+- [ ] Melhorias futuras: salvar PRECIFICACOES, histórico COMPRAS, filtro admin.
+
+## Arquivos relevantes
+- `C:\AEG_Automacao\croche-app\src\app\precificacao\page.tsx`
+- `C:\AEG_Automacao\croche-app\src\app\linhas\page.tsx`
+- `C:\AEG_Automacao\croche-app\src\app\receitas\page.tsx`
+- `C:\AEG_Automacao\croche-app\src\app\marcas\page.tsx`
+- `C:\AEG_Automacao\croche-app\src\app\dificuldades\page.tsx`
+- `C:\AEG_Automacao\croche-app\apps-script\Code.gs`
+- `C:\AEG_Automacao\croche-app\docs\PRD.md`
