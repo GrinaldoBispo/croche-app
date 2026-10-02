@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const box: React.CSSProperties = { maxWidth: 480, margin: "0 auto", padding: 16, display: "grid", gap: 12 };
-const input: React.CSSProperties = { width: "100%", minHeight: 44, fontSize: 16, padding: "10px 12px", boxSizing: "border-box" };
-const btn: React.CSSProperties = { minHeight: 48, fontSize: 16, fontWeight: 600 };
-const checkRow: React.CSSProperties = { display: "flex", alignItems: "center", gap: 10, minHeight: 44, border: "1px solid #ddd", borderRadius: 8, padding: "8px 12px", cursor: "pointer" };
-
 type LinhaOpt = { id: string; textura?: string; nome_linha?: string; cor?: string; marca?: string };
 type Receita = { id: string; nome_item?: string; linha_usada?: string; peso_necessario_g?: number; dificuldade_id?: string; valor_base_g?: number; margem_pct?: number };
 
@@ -100,44 +95,48 @@ export default function ReceitasPage() {
   const mapLinha = new Map(linhas.map((l) => [l.id, labelLinha(l)]));
 
   return (
-    <main style={box}>
+    <main className="container">
       <h1 style={{ margin: 0 }}>Receitas</h1>
-      <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
-        <input style={input} placeholder="nome da peça" value={form.nome_item} onChange={(e) => setForm({ ...form, nome_item: e.target.value })} required />
-        <select style={input} value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })}>
+      <form onSubmit={salvar} className="card">
+        <input className="input" placeholder="nome da peça" value={form.nome_item} onChange={(e) => setForm({ ...form, nome_item: e.target.value })} required />
+        <select className="input" value={form.dificuldade_id} onChange={(e) => setForm({ ...form, dificuldade_id: e.target.value })}>
           <option value="">dificuldade (opcional)...</option>
           {difs.map((d) => <option key={d.id} value={d.id}>{d.nome}</option>)}
         </select>
-        <fieldset style={{ border: "1px solid #ddd", borderRadius: 8, padding: 8, display: "grid", gap: 8, margin: 0 }}>
-          <legend>Linhas — pode marcar várias ({sel.length})</legend>
+        <fieldset style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 8, display: "grid", gap: 8, margin: 0, minWidth: 0 }}>
+          <legend style={{ fontSize: 14, color: "var(--muted)" }}>Linhas — pode marcar várias ({sel.length})</legend>
           {linhas.map((l) => (
-            <label key={l.id} style={checkRow}>
-              <input type="checkbox" checked={sel.includes(l.id)} onChange={() => toggle(l.id)} style={{ width: 22, height: 22 }} />
-              <span>{labelLinha(l)}</span>
+            <label key={l.id} style={{ display: "flex", alignItems: "center", gap: 10, minHeight: 44, border: "1px solid var(--border)", borderRadius: 12, padding: "8px 12px", cursor: "pointer", background: sel.includes(l.id) ? "var(--gold-bg)" : "var(--surface)" }}>
+              <input type="checkbox" checked={sel.includes(l.id)} onChange={() => toggle(l.id)} style={{ width: 22, height: 22, accentColor: "var(--primary)", flexShrink: 0 }} />
+              <span style={{ minWidth: 0 }}>{labelLinha(l)}</span>
             </label>
           ))}
         </fieldset>
-        <input style={input} placeholder="peso referência total (g, opcional)" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} />
-        <input style={input} placeholder="valor base/g mão de obra (opcional)" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} />
-        <input style={input} placeholder="margem % (opcional, ex: 20)" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
-        <button style={btn} type="submit">{editId ? "Atualizar receita" : "Salvar receita"}</button>
+        <input className="input" placeholder="peso referência total (g, opcional)" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} />
+        <input className="input" placeholder="valor base/g mão de obra (opcional)" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} />
+        <input className="input" placeholder="margem % (opcional, ex: 20)" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
+        <button className="btn btn-primary" type="submit">{editId ? "Atualizar receita" : "Salvar receita"}</button>
         {editId && (
           <>
-            <button style={btn} type="button" onClick={cancelar}>Cancelar</button>
-            <button style={{ ...btn, color: "red" }} type="button" onClick={excluir}>Excluir</button>
+            <button className="btn" type="button" onClick={cancelar}>Cancelar</button>
+            <button className="btn" style={{ color: "red" }} type="button" onClick={excluir}>Excluir</button>
           </>
         )}
       </form>
-      <p>{msg}</p>
-      <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 8 }}>
+      <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((x) => {
           const ids = String(x.linha_usada || "").split(",").map((s) => s.trim()).filter(Boolean);
           const nomes = ids.map((id) => mapLinha.get(id) || id);
           return (
-            <li key={x.id} onClick={() => editar(x)} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, cursor: "pointer" }}>
+            <li key={x.id} onClick={() => editar(x)} className="card card-click">
               <strong>{x.nome_item}</strong>
-              <br />{nomes.join(" + ") || "—"}
-              <br /><small>toque para editar</small>
+              <span style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                <span className="badge badge-accent">{ids.length} {ids.length === 1 ? "cor" : "cores"}</span>
+                {x.peso_necessario_g ? <span className="badge">{String(x.peso_necessario_g).replace(".", ",")}g ref</span> : null}
+              </span>
+              <small style={{ color: "var(--muted)" }}>{nomes.join(" + ") || "—"}</small>
+              <small style={{ color: "var(--muted)" }}>toque para editar</small>
             </li>
           );
         })}

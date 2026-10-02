@@ -1,10 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const box: React.CSSProperties = { maxWidth: 480, margin: "0 auto", padding: 16, display: "grid", gap: 12 };
-const input: React.CSSProperties = { width: "100%", minHeight: 44, fontSize: 16, padding: "10px 12px", boxSizing: "border-box" };
-const btn: React.CSSProperties = { minHeight: 48, fontSize: 16, fontWeight: 600 };
-
 function numBR(v: string) {
   return Number(String(v ?? "").replace(",", ".").trim());
 }
@@ -71,26 +67,30 @@ export default function DificuldadesPage() {
   }
 
   return (
-    <main style={box}>
+    <main className="container">
       <h1 style={{ margin: 0 }}>Dificuldades</h1>
-      <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
-        <input style={input} placeholder="nome (ex: Fácil)" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
-        <input style={input} placeholder="fator (ex: 1,3)" inputMode="decimal" value={form.fator_multiplicador} onChange={(e) => setForm({ ...form, fator_multiplicador: e.target.value })} required />
-        <input style={input} placeholder="descrição" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} />
-        <button style={btn} type="submit">{editId ? "Atualizar dificuldade" : "Salvar dificuldade"}</button>
+      <form onSubmit={salvar} className="card">
+        <input className="input" placeholder="nome (ex: Fácil)" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
+        <input className="input" placeholder="fator (ex: 1,3)" inputMode="decimal" value={form.fator_multiplicador} onChange={(e) => setForm({ ...form, fator_multiplicador: e.target.value })} required />
+        <input className="input" placeholder="descrição" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} />
+        <button className="btn btn-primary" type="submit">{editId ? "Atualizar dificuldade" : "Salvar dificuldade"}</button>
         {editId && (
           <>
-            <button style={btn} type="button" onClick={cancelar}>Cancelar</button>
-            <button style={{ ...btn, color: "red" }} type="button" onClick={excluir}>Excluir</button>
+            <button className="btn" type="button" onClick={cancelar}>Cancelar</button>
+            <button className="btn" style={{ color: "red" }} type="button" onClick={excluir}>Excluir</button>
           </>
         )}
       </form>
-      <p>{msg}</p>
-      <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 8 }}>
+      <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((d) => (
-          <li key={d.id} onClick={() => editar(d)} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, cursor: "pointer" }}>
-            {d.nome} - {fmtBR(d.fator_multiplicador)}
-            <br /><small>toque para editar</small>
+          <li key={d.id} onClick={() => editar(d)} className="card card-click">
+            <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+              <strong>{d.nome}</strong>
+              <span className="badge badge-accent">÷ {fmtBR(d.fator_multiplicador)}</span>
+            </div>
+            {d.descricao && <small style={{ color: "var(--muted)" }}>{d.descricao}</small>}
+            <small style={{ color: "var(--muted)" }}>toque para editar</small>
           </li>
         ))}
       </ul>

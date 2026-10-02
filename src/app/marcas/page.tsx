@@ -1,10 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const box: React.CSSProperties = { maxWidth: 480, margin: "0 auto", padding: 16, display: "grid", gap: 12 };
-const input: React.CSSProperties = { width: "100%", minHeight: 44, fontSize: 16, padding: "10px 12px", boxSizing: "border-box" };
-const btn: React.CSSProperties = { minHeight: 48, fontSize: 16, fontWeight: 600 };
-
 export default function MarcasPage() {
   const [lista, setLista] = useState<Array<{ id: string; nome?: string }>>([]);
   const [nome, setNome] = useState("");
@@ -50,24 +46,24 @@ export default function MarcasPage() {
   }
 
   return (
-    <main style={box}>
+    <main className="container">
       <h1 style={{ margin: 0 }}>Marcas</h1>
-      <form onSubmit={salvar} style={{ display: "grid", gap: 8 }}>
-        <input style={input} placeholder="nome da marca" value={nome} onChange={(e) => setNome(e.target.value)} required />
-        <button style={btn} type="submit">{editId ? "Atualizar marca" : "Salvar marca"}</button>
+      <form onSubmit={salvar} className="card">
+        <input className="input" placeholder="nome da marca" value={nome} onChange={(e) => setNome(e.target.value)} required />
+        <button className="btn btn-primary" type="submit">{editId ? "Atualizar marca" : "Salvar marca"}</button>
         {editId && (
           <>
-            <button style={btn} type="button" onClick={cancelar}>Cancelar</button>
-            <button style={{ ...btn, color: "red" }} type="button" onClick={excluir}>Excluir</button>
+            <button className="btn" type="button" onClick={cancelar}>Cancelar</button>
+            <button className="btn" style={{ color: "red" }} type="button" onClick={excluir}>Excluir</button>
           </>
         )}
       </form>
-      <p>{msg}</p>
-      <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 8 }}>
+      <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>{msg}</p>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
         {lista.map((m) => (
-          <li key={m.id} onClick={() => editar(m)} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, cursor: "pointer" }}>
-            {m.nome}
-            <br /><small>toque para editar</small>
+          <li key={m.id} onClick={() => editar(m)} className="card card-click">
+            <span className="badge badge-primary">{m.nome}</span>
+            <small style={{ color: "var(--muted)" }}>toque para editar</small>
           </li>
         ))}
       </ul>
