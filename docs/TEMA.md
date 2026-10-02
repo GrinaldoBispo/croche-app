@@ -24,5 +24,7 @@ Padrão Craft / Aconchegante. Fonte da verdade: `src/app/globals.css` importado 
 
 ## Uso
 - Páginas usam `className="container"` + `card/input/btn/badge`. Inline só p/ valor dinâmico (ex: `style={{--novelo-c: cor}}`).
+- Formulários: cada campo com `<label>` + título 13px (`var(--muted)`) acima do `.input`; placeholder curto de exemplo.
+- Listas: `.card-click` + `try/catch` no `carregar()` com botão `Tentar de novo` (Apps Script frio dá timeout).
 - Header/Nav (Passo 2): pill papel + SVG sem emoji, aba ativa `--primary`.
 - Reuso: copiar `globals.css` + este arquivo para próximo projeto, trocar só `primary/accent/bg`.

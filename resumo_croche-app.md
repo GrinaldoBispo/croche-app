@@ -102,3 +102,40 @@ Sessão: clone + linhas/precificação
 - `C:\AEG_Automacao\croche-app\src\app\dificuldades\page.tsx`
 - `C:\AEG_Automacao\croche-app\apps-script\Code.gs`
 - `C:\AEG_Automacao\croche-app\docs\PRD.md`
+---
+# Resumo da Sessão — croche-app
+Data: 2026-10-02
+Projeto/Pasta: C:\AEG_Automacao\croche-app
+Sessão/Comando: /resumo
+## Objetivo (Goal)
+- Redesign incremental da interface (tema Craft, nav SVG, dashboard, cards) + correções de login e resiliência de carregamento.
+## Restrições e Contexto (Constraints / Critical context)
+- Mobile-first: container 480px, input 44px, botão 48px, nunca display:none; CRUD sempre por id; uma etapa por vez com build + commit por etapa.
+- Fonte da verdade: cabeçalho físico da planilha + C:\AEG_Automacao\croche-app\apps-script\Code.gs; tema em C:\AEG_Automacao\croche-app\src\app\globals.css documentado em C:\AEG_Automacao\croche-app\docs\TEMA.md.
+- Produção: https://croche-app-one.vercel.app (Vercel); backend Google Apps Script /exec (cold start lento → timeouts intermitentes).
+## Progresso (Progress)
+- Passo 1 (6567c24): C:\AEG_Automacao\croche-app\src\app\globals.css (tokens, Plus Jakarta Sans, card/btn/badge/novelo/price/result-banner/welcome) + C:\AEG_Automacao\croche-app\docs\TEMA.md + import em layout.tsx.
+- Passo 2 (7a3d67e): C:\AEG_Automacao\croche-app\src\components\nav.tsx — header sticky glass + avatar + pill papel, bottom nav com SVG próprio, indicador ativo por opacity.
+- Fix login (e73130b): C:\AEG_Automacao\croche-app\src\app\api\login\route.ts (limit 200, LOG_ACESSOS fire-and-forget), C:\AEG_Automacao\croche-app\src\lib\sheets.ts (rejeita HTML com msg legível), login faz parse defensivo.
+- Passo 3 (99aa5fe): dashboard em C:\AEG_Automacao\croche-app\src\app\page.tsx (welcome + contadores) + fix centralização mobile login.
+- Passo 4 (f7a67de): home sem menus + cards /linhas (novelo/badges/R$/g) + /precificacao (result-banner + ratio-bar).
+- Padrão (51d1787): mesmo padrão em receitas/marcas/dificuldades/usuarios; Labels (510ad14): títulos visíveis nos 8 formulários.
+- Ajustes home (c3a63da, 00c8f16): badge admin legível, atalho Nova receita, plural, placeholder textura numérico.
+- Resiliência (c3b2827): try/catch + botão Tentar de novo nas 6 telas (linhas caía no carregando por falta de catch no Promise.all).
+## Decisões-chave (Key decisions)
+- Redesign só no front, sem tocar no backend Sheets; indicador ativo do nav usa opacity (não display:none).
+- Login não espera LOG_ACESSOS (economiza 1 roundtrip no Apps Script frio).
+- Erro de HTML do /exec vira mensagem legível em vez de SyntaxError.
+## Próximos passos (Next steps)
+- [ ] Testar fluxo completo no celular em produção após deploys.
+- [ ] Backlog: colar Code.gs atual no Apps Script se faltar aba, PropertiesService API_KEY, onboarding por URL, Pedidos v2.
+## Arquivos relevantes
+- C:\AEG_Automacao\croche-app\src\app\globals.css
+- C:\AEG_Automacao\croche-app\docs\TEMA.md
+- C:\AEG_Automacao\croche-app\src\components\nav.tsx
+- C:\AEG_Automacao\croche-app\src\app\page.tsx
+- C:\AEG_Automacao\croche-app\src\app\linhas\page.tsx
+- C:\AEG_Automacao\croche-app\src\app\receitas\page.tsx
+- C:\AEG_Automacao\croche-app\src\app\precificacao\page.tsx
+- C:\AEG_Automacao\croche-app\src\app\login\page.tsx
+- C:\AEG_Automacao\croche-app\src\lib\sheets.ts

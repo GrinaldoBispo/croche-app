@@ -6,8 +6,9 @@
 |------|--------|-----------|
 | Fase 1: Backend Sheets | ✅ | Apps Script v3 + seed/migrate validados |
 | Fase 2: Web + Auth | ✅ | Next root na Vercel, login com senha, rotas protegidas |
-| Fase 3: Cadastros | 🟡 | Marcas/Dificuldades/Receitas criados, falta pendência MARCAS no Apps Script |
-| Fase 4: Calculadora | ⬜ | Preço da peça a partir da receita |
+| Fase 3: Cadastros | ✅ | Linhas/Marcas/Dificuldades/Receitas/Usuários com padrão visual + labels |
+| Fase 4: Calculadora | ✅ | Precificação (material + MO / fator + margem) com banner + proporção |
+| Fase 5: Redesign UI | ✅ | Tema Craft, nav SVG, dashboard, try/catch nas telas |
 
 ---
 
@@ -19,8 +20,7 @@
 ## Pendente
 
 ### Prioridade Alta
-1. **Colar Code.gs com MARCAS no Apps Script** — seed não criou a aba (backend ainda antigo)
-2. **Calculadora de preço** — `custo_material + mao_obra + margem` na receita
+1. **Teste mobile em produção** — login → cadastros → precificação no celular
 
 ### Prioridade Média
 2. **Filtro admin** — refinar papéis e LOG_ACESSOS

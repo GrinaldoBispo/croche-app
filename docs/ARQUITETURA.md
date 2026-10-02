@@ -22,6 +22,8 @@
 ## Front mobile-first (foco do projeto)
 - Container máx 480px, inputs mín 44px, botões mín 48px, fonte 16px (sem zoom iOS)
 - Breakpoint 760px só empilha, nunca esconde marca
+- Tema Craft centralizado: `src/app/globals.css` (tokens + componentes) + convenção em `docs/TEMA.md`
+- Formulários com label visível por campo; listas com `try/catch` + botão Tentar de novo (Apps Script frio dá timeout)
 - Validar toda tela no celular antes de commitar
 
 ## Segurança MVP
@@ -33,7 +35,7 @@
 Login valida email+senha (hash SHA-256 de `email:senha`) em USUARIOS, seta cookie httpOnly `croche_user`, grava LOG_ACESSOS. Middleware protege tudo exceto `/login`, `/register`, `/api/login`, `/api/register`, `/api/health`. Menu e `/api/usuarios` exigem papel admin.
 
 ## Estrutura de Diretórios
-`src/app/` (login, register, linhas, marcas, dificuldades, receitas, usuarios), `src/app/api/*` (proxy), `src/components/nav.tsx`, `src/lib/sheets.ts`, `apps-script/Code.gs`.
+`src/app/` (login, register, linhas, marcas, dificuldades, receitas, precificacao, usuarios, mais), `src/app/api/*` (proxy), `src/app/globals.css` (tema), `src/components/nav.tsx` (header glass + nav SVG), `src/lib/sheets.ts`, `apps-script/Code.gs`, `docs/TEMA.md`.
 
 ## Integrações Externas
 Vercel → `APPS_SCRIPT_URL` (`/exec`) → Sheets. → Veja `.env.example`.
