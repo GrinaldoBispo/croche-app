@@ -15,6 +15,7 @@ export default function ReceitasPage() {
   const [lista, setLista] = useState<Receita[]>([]);
   const [form, setForm] = useState({ nome_item: "", dificuldade_id: "" });
   const [sel, setSel] = useState<string[]>([]);
+  const [busca, setBusca] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
   const [erro, setErro] = useState(false);
@@ -42,12 +43,17 @@ export default function ReceitasPage() {
   }
   useEffect(() => { carregar(); }, []);
 
-  function toggle(id: string) {
-    setSel((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+  function adicionar(id: string) {
+    setSel((s) => (s.includes(id) ? s : [...s, id]));
+  }
+
+  function remover(id: string) {
+    setSel((s) => s.filter((x) => x !== id));
   }
 
   function editar(r: Receita) {
     setEditId(r.id);
+    setBusca("");
     setForm({
       nome_item: r.nome_item || "",
       dificuldade_id: r.dificuldade_id || "",
@@ -58,13 +64,14 @@ export default function ReceitasPage() {
 
   function cancelar() {
     setEditId(null);
+    setBusca("");
     setForm({ nome_item: "", dificuldade_id: "" });
     setSel([]);
   }
 
   async function salvar(e: React.FormEvent) {
     e.preventDefault();
-    if (sel.length === 0) { setMsg("marque ao menos 1 linha"); return; }
+    if (sel.length === 0) { setMsg("adicione ao menos 1 linha"); return; }
     setMsg("salvando...");
     const data = {
       nome_item: form.nome_item,
@@ -92,6 +99,11 @@ export default function ReceitasPage() {
   }
 
   const mapLinha = new Map(linhas.map((l) => [l.id, labelLinha(l)]));
+  const termo = busca.trim().toLowerCase();
+  const resultados = (termo
+    ? linhas.filter((l) => labelLinha(l).toLowerCase().includes(termo))
+    : linhas
+  ).filter((l) => !sel.includes(l.id)).slice(0, 6);
 
   return (
     <main className="container">
@@ -109,13 +121,28 @@ export default function ReceitasPage() {
           </select>
         </label>
         <fieldset style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 8, display: "grid", gap: 8, margin: 0, minWidth: 0 }}>
-          <legend style={{ fontSize: 14, color: "var(--muted)" }}>Linhas — pode marcar várias ({sel.length})</legend>
-          {linhas.map((l) => (
-            <label key={l.id} style={{ display: "flex", alignItems: "center", gap: 10, minHeight: 44, border: "1px solid var(--border)", borderRadius: 12, padding: "8px 12px", cursor: "pointer", background: sel.includes(l.id) ? "var(--gold-bg)" : "var(--surface)" }}>
-              <input type="checkbox" checked={sel.includes(l.id)} onChange={() => toggle(l.id)} style={{ width: 22, height: 22, accentColor: "var(--primary)", flexShrink: 0 }} />
-              <span style={{ minWidth: 0 }}>{labelLinha(l)}</span>
-            </label>
-          ))}
+          <legend style={{ fontSize: 14, color: "var(--muted)" }}>Linhas ({sel.length})</legend>
+          <input className="input" placeholder="pesquisar cor, textura ou marca..." value={busca} onChange={(e) => setBusca(e.target.value)} />
+          {sel.length > 0 && (
+            <span style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {sel.map((id) => (
+                <span key={id} className="badge badge-accent" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  {mapLinha.get(id) || id}
+                  <button type="button" aria-label="remover linha" onClick={() => remover(id)} style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: 16, lineHeight: 1, minWidth: 24, minHeight: 24 }}>×</button>
+                </span>
+              ))}
+            </span>
+          )}
+          {resultados.length === 0 ? (
+            <small style={{ color: "var(--muted)" }}>{termo ? "nada encontrado para essa busca" : "todas as linhas já foram adicionadas"}</small>
+          ) : (
+            resultados.map((l) => (
+              <div key={l.id} style={{ display: "flex", alignItems: "center", gap: 8, border: "1px solid var(--border)", borderRadius: 12, padding: "8px 12px", background: "var(--surface)", minHeight: 44 }}>
+                <span style={{ minWidth: 0, flex: 1 }}>{labelLinha(l)}</span>
+                <button className="btn" type="button" onClick={() => adicionar(l.id)} style={{ minHeight: 44, flexShrink: 0 }}>Adicionar</button>
+              </div>
+            ))
+          )}
         </fieldset>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar receita" : "Salvar receita"}</button>
         {editId && (
