@@ -137,9 +137,9 @@ export default function ReceitasPage() {
             <small style={{ color: "var(--muted)" }}>{termo ? "nada encontrado para essa busca" : "todas as linhas já foram adicionadas"}</small>
           ) : (
             resultados.map((l) => (
-              <div key={l.id} style={{ display: "flex", alignItems: "center", gap: 8, border: "1px solid var(--border)", borderRadius: 12, padding: "8px 12px", background: "var(--surface)", minHeight: 44 }}>
-                <span style={{ minWidth: 0, flex: 1 }}>{labelLinha(l)}</span>
-                <button className="btn" type="button" onClick={() => adicionar(l.id)} style={{ minHeight: 44, flexShrink: 0 }}>Adicionar</button>
+              <div key={l.id} style={{ display: "grid", gap: 8, border: "1px solid var(--border)", borderRadius: 12, padding: "8px 12px", background: "var(--surface)" }}>
+                <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>{labelLinha(l)}</span>
+                <button className="btn" type="button" onClick={() => adicionar(l.id)} style={{ minHeight: 48, width: "100%" }}>Adicionar</button>
               </div>
             ))
           )}
