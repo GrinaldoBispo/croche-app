@@ -1,6 +1,6 @@
 # CHECKPOINT — croche-app
-- Data: 2026-10-02
-- Feito: redesign UI completo + login rápido + try/catch nas 6 telas; docs e resumo atualizados
-- Onde: `src/app/globals.css`, `src/components/nav.tsx`, telas `src/app/*`, `docs/TEMA.md`
+- Data: 2026-10-03
+- Feito: receitas enxuta (só nome+linhas+dificuldade); peso/mão/margem só na precificação; `tsc` ok
+- Onde: `src/app/receitas/page.tsx`, `src/app/precificacao/page.tsx`, `apps-script/Code.gs`
 - Próximo: teste mobile em produção (login → cadastros → precificação)
 - Bloqueio: nenhum

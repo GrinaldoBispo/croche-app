@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 type Linha = { id: string; marca?: string; textura?: string; nome_linha?: string; cor?: string; peso_novelo_g?: number; preco_pago?: number; preco_por_g?: number };
-type Receita = { id: string; nome_item?: string; linha_usada?: string; dificuldade_id?: string; valor_base_g?: number; margem_pct?: number };
+type Receita = { id: string; nome_item?: string; linha_usada?: string; dificuldade_id?: string };
 type Dif = { id: string; nome?: string; fator_multiplicador?: number };
 
 function numBR(v: string) {
@@ -73,11 +73,11 @@ export default function PrecificacaoPage() {
     const r = receitas.find((x) => x.id === id);
     if (r) {
       setDifId(r.dificuldade_id || "");
-      setValorBase(r.valor_base_g !== undefined && r.valor_base_g !== null ? String(r.valor_base_g).replace(".", ",") : "");
-      setMargem(r.margem_pct !== undefined && r.margem_pct !== null ? String(r.margem_pct).replace(".", ",") : "");
     } else {
-      setDifId(""); setValorBase(""); setMargem("");
+      setDifId("");
     }
+    setValorBase("");
+    setMargem("");
   }
 
   const calc = useMemo(() => {

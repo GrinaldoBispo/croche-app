@@ -2,12 +2,7 @@
 import { useEffect, useState } from "react";
 
 type LinhaOpt = { id: string; textura?: string; nome_linha?: string; cor?: string; marca?: string };
-type Receita = { id: string; nome_item?: string; linha_usada?: string; peso_necessario_g?: number; dificuldade_id?: string; valor_base_g?: number; margem_pct?: number };
-
-function numBR(v: string) {
-  if (v === "" || v === undefined) return 0;
-  return Number(String(v).replace(",", ".").trim());
-}
+type Receita = { id: string; nome_item?: string; linha_usada?: string; dificuldade_id?: string };
 
 function labelLinha(l: LinhaOpt) {
   const tex = l.textura || (l as { nome_linha?: string }).nome_linha || "—";
@@ -18,7 +13,7 @@ export default function ReceitasPage() {
   const [linhas, setLinhas] = useState<LinhaOpt[]>([]);
   const [difs, setDifs] = useState<Array<{ id: string; nome?: string }>>([]);
   const [lista, setLista] = useState<Receita[]>([]);
-  const [form, setForm] = useState({ nome_item: "", peso_necessario_g: "", dificuldade_id: "", valor_base_g: "", margem_pct: "" });
+  const [form, setForm] = useState({ nome_item: "", dificuldade_id: "" });
   const [sel, setSel] = useState<string[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
@@ -55,10 +50,7 @@ export default function ReceitasPage() {
     setEditId(r.id);
     setForm({
       nome_item: r.nome_item || "",
-      peso_necessario_g: r.peso_necessario_g !== undefined && r.peso_necessario_g !== null ? String(r.peso_necessario_g).replace(".", ",") : "",
       dificuldade_id: r.dificuldade_id || "",
-      valor_base_g: r.valor_base_g !== undefined && r.valor_base_g !== null ? String(r.valor_base_g).replace(".", ",") : "",
-      margem_pct: r.margem_pct !== undefined && r.margem_pct !== null ? String(r.margem_pct).replace(".", ",") : "",
     });
     setSel(String(r.linha_usada || "").split(",").map((s) => s.trim()).filter(Boolean));
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -66,7 +58,7 @@ export default function ReceitasPage() {
 
   function cancelar() {
     setEditId(null);
-    setForm({ nome_item: "", peso_necessario_g: "", dificuldade_id: "", valor_base_g: "", margem_pct: "" });
+    setForm({ nome_item: "", dificuldade_id: "" });
     setSel([]);
   }
 
@@ -77,10 +69,7 @@ export default function ReceitasPage() {
     const data = {
       nome_item: form.nome_item,
       linha_usada: sel.join(","),
-      peso_necessario_g: numBR(form.peso_necessario_g),
       dificuldade_id: form.dificuldade_id,
-      valor_base_g: numBR(form.valor_base_g),
-      margem_pct: form.margem_pct === "" ? 0 : numBR(form.margem_pct),
     };
     const payload = editId ? { action: "update", id: editId, data: { id: editId, ...data } } : { action: "create", data };
     const r = await fetch("/api/receitas", {
@@ -128,18 +117,6 @@ export default function ReceitasPage() {
             </label>
           ))}
         </fieldset>
-        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Peso referência total (g)</span>
-          <input className="input" placeholder="opcional" inputMode="decimal" value={form.peso_necessario_g} onChange={(e) => setForm({ ...form, peso_necessario_g: e.target.value })} />
-        </label>
-        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Valor base/g mão de obra</span>
-          <input className="input" placeholder="opcional" inputMode="decimal" value={form.valor_base_g} onChange={(e) => setForm({ ...form, valor_base_g: e.target.value })} />
-        </label>
-        <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Margem (%)</span>
-          <input className="input" placeholder="ex: 20" inputMode="decimal" value={form.margem_pct} onChange={(e) => setForm({ ...form, margem_pct: e.target.value })} />
-        </label>
         <button className="btn btn-primary" type="submit">{editId ? "Atualizar receita" : "Salvar receita"}</button>
         {editId && (
           <>
@@ -161,7 +138,6 @@ export default function ReceitasPage() {
               <strong>{x.nome_item}</strong>
               <span style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                 <span className="badge badge-accent">{ids.length} {ids.length === 1 ? "cor" : "cores"}</span>
-                {x.peso_necessario_g ? <span className="badge">{String(x.peso_necessario_g).replace(".", ",")}g ref</span> : null}
               </span>
               <small style={{ color: "var(--muted)" }}>{nomes.join(" + ") || "—"}</small>
               <small style={{ color: "var(--muted)" }}>toque para editar</small>
