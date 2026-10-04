@@ -9,6 +9,8 @@
 | Fase 3: Cadastros | 100% | ✅ |
 | Fase 4: Calculadora | 100% | ✅ |
 | Fase 5: Redesign UI | 100% | ✅ |
+| Fase 6: Receita molde + Precificação modos | 100% | ✅ |
+| Fase 7: Peças Prontas | 0% | 🔜 |
 
 ---
 
@@ -35,12 +37,23 @@
 ## Fase 5: Redesign UI ✅
 - [x] 2026-10-02 — Tema Craft (`globals.css` + `docs/TEMA.md`), header glass + nav SVG, dashboard `/` sem menus
 
+## Fase 6: Receita molde + Precificação modos ✅
+- [x] 2026-10-03 — Receitas vira molde (nome + dificuldade + qtd cores com stepper); peso/MO/margem saem do cadastro
+- [x] 2026-10-03 — Precificação com N slots de cor (linha + peso, R$/g do estoque); migrate `/exec` OK (`RECEITAS:+ qtd_cores`); colunas antigas removidas da planilha; Trilho Turco com `qtd_cores: 3` validado
+- [x] 2026-10-03 — Precificação com modos Por dificuldade (material / fator) e Por hora ((material + h × R$/h) × (1+margem)); Simular R$/g removido do front
+
+## Fase 7: Peças Prontas 🔜 (Em Desenvolvimento)
+- [ ] Botão Criar peça na `/precificacao` salva snapshot (receita, modo, cores, preço) na aba `PECAS_PRONTAS`
+- [ ] Rota `/pecas-prontas` lista as peças criadas (+ `/api/pecas-prontas` proxy)
+- [ ] 2ª rota nova a definir com a cliente
+
 ---
 
 ## Pendente
 
 ### Prioridade Alta
-1. Testar fluxo completo no celular em produção (login → cadastros → precificação)
+1. Fase 7 Peças Prontas — botão Criar peça + rota `/pecas-prontas` + aba `PECAS_PRONTAS` (2ª rota a definir)
+2. Testar fluxo completo no celular em produção (login → cadastros → precificação)
 
 ### Prioridade Média
 2. Filtro admin refinado + LOG_ACESSOS
@@ -53,6 +66,10 @@
 ---
 
 ## Changelog Recente
+
+### 2026-10-03
+- ✅ Receita molde (qtd cores) + precificação com slots e modos dificuldade/hora + migrate `qtd_cores` validado em produção
+- ✅ Ajustes mobile via prints (resultado empilhado, stepper −/+ 48px)
 
 ### 2026-10-02
 - ✅ Redesign UI (tema, nav SVG, dashboard, cards, labels)

@@ -139,3 +139,41 @@ Sessão/Comando: /resumo
 - C:\AEG_Automacao\croche-app\src\app\precificacao\page.tsx
 - C:\AEG_Automacao\croche-app\src\app\login\page.tsx
 - C:\AEG_Automacao\croche-app\src\lib\sheets.ts
+
+---
+
+# Resumo da Sessão — croche-app (continuação)
+
+Data: 2026-10-03/04
+Sessão: receita molde + precificação modos + docs Fase 7
+
+## Objetivo (Goal)
+- Tirar peso/MO/margem do cadastro de receitas; receita vira molde e cor é escolhida na precificação; separar modos de preço; planejar Peças Prontas.
+
+## Progresso (Progress)
+- `src/app/receitas/page.tsx`: molde (nome + dificuldade + qtd cores com stepper −/+ 48px); `qtd_cores` gravado, `linha_usada` limpa no save.
+- `src/app/precificacao/page.tsx`: N slots de cor por receita (linha + peso, R$/g do estoque); modos Por dificuldade (material ÷ fator) e Por hora ((material + h × R$/h) × (1+margem)); Simular R$/g removido do front; receitas antigas convertidas (qtd derivada, linhas pré-selecionadas).
+- `apps-script/Code.gs`: `RECEITAS: ["id","nome_item","dificuldade_id","qtd_cores"]`; migrate `/exec` OK (`RECEITAS:+ qtd_cores`); colunas antigas excluídas na planilha; Trilho Turco com `qtd_cores: 3` validado via GET.
+- Ajustes mobile via prints em `prints/`: resultado empilhado com botão full-width; stepper com botões fixos (`.btn` tem `width:100%`).
+- Commits: `a997991`, `a4317c3`, `cea26be`, `176559b`, `5c9bd41`, `3a351b1` push na `main`.
+
+## Decisões-chave (Key decisions)
+- Receita não guarda cor (mesmo modelo sai em várias cores); cor + peso só na precificação.
+- Precificação não salva nada (só calcula) — snapshot fica para a Fase 7 (Peças Prontas).
+- `prints/` fora do git (só apoio visual local).
+
+## Próximos passos (Next steps)
+- [ ] Fase 7 Peças Prontas: botão Criar peça na precificação + rota `/pecas-prontas` + aba `PECAS_PRONTAS` (`id | receita_id | nome_peca | modo | cores_json | preco_final | criado_em`).
+- [ ] Definir a 2ª rota nova com a cliente.
+- [ ] Pequeno ajuste na precificação (pendente, depois).
+- [ ] Teste mobile em produção do fluxo completo.
+
+## Arquivos relevantes
+- `C:\AEG_Automacao\croche-app\src\app\receitas\page.tsx`
+- `C:\AEG_Automacao\croche-app\src\app\precificacao\page.tsx`
+- `C:\AEG_Automacao\croche-app\apps-script\Code.gs`
+- `C:\AEG_Automacao\croche-app\docs\PROGRESSO.md`
+- `C:\AEG_Automacao\croche-app\docs\PLANO.md`
+- `C:\AEG_Automacao\croche-app\docs\ROTAS.md`
+- `C:\AEG_Automacao\croche-app\docs\ARQUITETURA.md`
+- `C:\AEG_Automacao\croche-app\docs\PRD.md`

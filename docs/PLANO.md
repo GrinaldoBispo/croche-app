@@ -9,6 +9,8 @@
 | Fase 3: Cadastros | ✅ | Linhas/Marcas/Dificuldades/Receitas/Usuários com padrão visual + labels |
 | Fase 4: Calculadora | ✅ | Precificação (material + MO / fator + margem) com banner + proporção |
 | Fase 5: Redesign UI | ✅ | Tema Craft, nav SVG, dashboard, try/catch nas telas |
+| Fase 6: Receita molde + Precificação modos | ✅ | Molde com qtd cores, slots por cor, modos dificuldade/hora |
+| Fase 7: Peças Prontas | 🔜 | Botão Criar peça + rota /pecas-prontas + aba PECAS_PRONTAS (próximo passo) |
 
 ---
 
@@ -20,7 +22,8 @@
 ## Pendente
 
 ### Prioridade Alta
-1. **Teste mobile em produção** — login → cadastros → precificação no celular
+1. **Peças Prontas (Fase 7)** — botão Criar peça na precificação + `/pecas-prontas` + aba `PECAS_PRONTAS`; 2ª rota a definir
+2. **Teste mobile em produção** — login → cadastros → precificação no celular
 
 ### Prioridade Média
 2. **Filtro admin** — refinar papéis e LOG_ACESSOS

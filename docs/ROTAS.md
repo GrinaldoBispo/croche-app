@@ -13,8 +13,9 @@
 | /linhas | GET | Cadastro de linhas (marca via select de MARCAS, cards com novelo/badges/R$/g) |
 | /marcas | GET | Cadastro de marcas |
 | /dificuldades | GET | Cadastro de dificuldades |
-| /receitas | GET | Cadastro de receitas (multi-cor checkbox + selects, cards com badge nº cores) |
-| /precificacao | GET | Precificação por cor (peso usado, divide fator, opcionais, banner + barra proporção) |
+| /receitas | GET | Cadastro de receitas molde (nome + dificuldade + qtd cores com stepper, badge nº cores) |
+| /precificacao | GET | Precificação por cor com modos Por dificuldade / Por hora (slots por cor, banner + barra proporção) |
+| /pecas-prontas | GET | Próximo passo (Fase 7): lista de peças criadas via botão Criar peça na precificação |
 | /usuarios | GET | Admin: CRUD de usuários |
 | /mais | GET | Hub mobile: Marcas, Dificuldades, Precificação, Usuários (admin), Sair |
 
@@ -30,6 +31,7 @@
 | /api/marcas | GET/POST | Proxy MARCAS | Sim |
 | /api/dificuldades | GET/POST | Proxy DIFICULDADES | Sim |
 | /api/receitas | GET/POST | Proxy RECEITAS | Sim |
+| /api/pecas-prontas | GET/POST | Próximo passo (Fase 7): proxy PECAS_PRONTAS | Sim |
 | /api/usuarios | GET/POST | Proxy USUARIOS (somente admin) | Admin |
 
 ## Fluxos

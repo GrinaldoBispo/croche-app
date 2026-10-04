@@ -7,9 +7,10 @@
 
 ## Abas (fonte da verdade = cabeçalho físico da planilha)
 - MARCAS: id | nome
-- LINHAS: id | marca | nome_linha | cor | peso_novelo_g | preco_pago | preco_por_g
+- LINHAS: id | marca | textura | cor | peso_novelo_g | preco_pago | preco_por_g | quantidade
 - DIFICULDADES: id | nome | fator_multiplicador | descricao
-- RECEITAS: id | nome_item | linha_usada | peso_necessario_g | dificuldade_id | valor_base_g | margem_pct
+- RECEITAS: id | nome_item | dificuldade_id | qtd_cores (molde; cores escolhidas na precificação)
+- PECAS_PRONTAS (próximo passo, Fase 7): id | receita_id | nome_peca | modo | cores_json | preco_final | criado_em
 - USUARIOS: id | nome | email | senha_hash | papel | ativo | spreadsheet_url | criado_em
 - LOG_ACESSOS: id | usuario_id | acao | em
 
@@ -35,7 +36,7 @@
 Login valida email+senha (hash SHA-256 de `email:senha`) em USUARIOS, seta cookie httpOnly `croche_user`, grava LOG_ACESSOS. Middleware protege tudo exceto `/login`, `/register`, `/api/login`, `/api/register`, `/api/health`. Menu e `/api/usuarios` exigem papel admin.
 
 ## Estrutura de Diretórios
-`src/app/` (login, register, linhas, marcas, dificuldades, receitas, precificacao, usuarios, mais), `src/app/api/*` (proxy), `src/app/globals.css` (tema), `src/components/nav.tsx` (header glass + nav SVG), `src/lib/sheets.ts`, `apps-script/Code.gs`, `docs/TEMA.md`.
+`src/app/` (login, register, linhas, marcas, dificuldades, receitas, precificacao, usuarios, mais; pecas-prontas no próximo passo), `src/app/api/*` (proxy), `src/app/globals.css` (tema), `src/components/nav.tsx` (header glass + nav SVG), `src/lib/sheets.ts`, `apps-script/Code.gs`, `docs/TEMA.md`.
 
 ## Integrações Externas
 Vercel → `APPS_SCRIPT_URL` (`/exec`) → Sheets. → Veja `.env.example`.
