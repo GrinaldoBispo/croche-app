@@ -111,9 +111,9 @@ export default function ReceitasPage() {
         <div style={{ display: "grid", gap: 4, minWidth: 0 }}>
           <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Qtd de cores da peça</span>
           <div style={{ display: "flex", gap: 8, alignItems: "stretch" }}>
-            <button className="btn" type="button" aria-label="diminuir cores" onClick={() => mudarQtd(-1)} style={{ minWidth: 48, minHeight: 48, fontSize: 20 }}>−</button>
+            <button className="btn" type="button" aria-label="diminuir cores" onClick={() => mudarQtd(-1)} style={{ flex: "0 0 48px", width: 48, minHeight: 48, fontSize: 20, padding: 0 }}>−</button>
             <input className="input" style={{ textAlign: "center", flex: 1, minWidth: 0 }} inputMode="numeric" value={qtd} onChange={(e) => setQtd(e.target.value)} />
-            <button className="btn" type="button" aria-label="aumentar cores" onClick={() => mudarQtd(1)} style={{ minWidth: 48, minHeight: 48, fontSize: 20 }}>+</button>
+            <button className="btn" type="button" aria-label="aumentar cores" onClick={() => mudarQtd(1)} style={{ flex: "0 0 48px", width: 48, minHeight: 48, fontSize: 20, padding: 0 }}>+</button>
           </div>
           <small style={{ color: "var(--muted)" }}>as cores são escolhidas na precificação</small>
         </div>
