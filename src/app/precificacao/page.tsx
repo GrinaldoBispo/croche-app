@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 type Linha = { id: string; marca?: string; textura?: string; nome_linha?: string; cor?: string; peso_novelo_g?: number; preco_pago?: number; preco_por_g?: number };
 type Receita = { id: string; nome_item?: string; linha_usada?: string; dificuldade_id?: string; qtd_cores?: number };
 type Dif = { id: string; nome?: string; fator_multiplicador?: number };
-type Slot = { linhaId: string; peso: string; sim: string };
+type Slot = { linhaId: string; peso: string };
 
 function numBR(v: string) {
   if (v === "" || v === undefined) return 0;
@@ -46,8 +46,10 @@ export default function PrecificacaoPage() {
   const [difs, setDifs] = useState<Dif[]>([]);
   const [msg, setMsg] = useState("");
   const [receitaId, setReceitaId] = useState("");
+  const [modo, setModo] = useState<"dificuldade" | "hora">("dificuldade");
   const [difId, setDifId] = useState("");
-  const [valorBase, setValorBase] = useState("");
+  const [horas, setHoras] = useState("");
+  const [valorHora, setValorHora] = useState("");
   const [margem, setMargem] = useState("");
   const [slots, setSlots] = useState<Slot[]>([]);
   const [erro, setErro] = useState(false);
@@ -80,13 +82,14 @@ export default function PrecificacaoPage() {
     setReceitaId(id);
     const r = receitas.find((x) => x.id === id);
     if (!r) {
-      setDifId(""); setValorBase(""); setMargem(""); setSlots([]);
+      setDifId(""); setHoras(""); setValorHora(""); setMargem(""); setSlots([]);
       return;
     }
     const antigos = idsDe(r);
-    setSlots(Array.from({ length: qtdDe(r) }, (_, i) => ({ linhaId: antigos[i] || "", peso: "", sim: "" })));
+    setSlots(Array.from({ length: qtdDe(r) }, (_, i) => ({ linhaId: antigos[i] || "", peso: "" })));
     setDifId(r.dificuldade_id || "");
-    setValorBase("");
+    setHoras("");
+    setValorHora("");
     setMargem("");
   }
 
@@ -99,8 +102,7 @@ export default function PrecificacaoPage() {
     const itens = slots.map((sl, i) => {
       const l = mapLinha.get(sl.linhaId);
       const rg = l ? rgEstoque(l) : 0;
-      const rgSim = numBR(sl.sim);
-      const rgEf = rgSim > 0 ? rgSim : rg;
+      const rgEf = rg;
       const peso = numBR(sl.peso);
       const roloG = l ? Number(l.peso_novelo_g || 0) : 0;
       const pago = l ? Number(l.preco_pago || 0) : 0;
@@ -108,23 +110,21 @@ export default function PrecificacaoPage() {
     });
     const material = itens.reduce((s, x) => s + x.custo, 0);
     const pesoTotal = itens.reduce((s, x) => s + x.peso, 0);
-    const vb = numBR(valorBase);
-    const mao = vb > 0 ? vb * pesoTotal : 0;
     const dif = difs.find((d) => d.id === difId);
     const fator = dif && Number(dif.fator_multiplicador) ? Number(dif.fator_multiplicador) : 1;
-    const base = material + mao;
-    const comDif = base / fator;
-    const mg = margem === "" ? 0 : numBR(margem);
-    const final = comDif * (1 + mg / 100);
-    const margemValor = final - comDif;
+    const mao = modo === "hora" ? numBR(horas) * numBR(valorHora) : 0;
+    const base = modo === "hora" ? material + mao : material / fator;
+    const mg = modo === "hora" && margem !== "" ? numBR(margem) : 0;
+    const final = base * (1 + mg / 100);
+    const margemValor = final - base;
     const pMat = final > 0 ? (material / final) * 100 : 0;
     const pMao = final > 0 ? (mao / final) * 100 : 0;
     const pMar = final > 0 ? (margemValor / final) * 100 : 0;
-    return { itens, material, pesoTotal, mao, fator, difNome: dif?.nome || "—", comDif, margemValor, final, pMat, pMao, pMar };
-  }, [receita, slots, mapLinha, valorBase, difs, difId, margem]);
+    return { itens, material, pesoTotal, mao, fator, difNome: dif?.nome || "—", margemValor, final, pMat, pMao, pMar };
+  }, [receita, slots, mapLinha, modo, horas, valorHora, difs, difId, margem]);
 
   function limpar() {
-    setReceitaId(""); setDifId(""); setValorBase(""); setMargem(""); setSlots([]);
+    setReceitaId(""); setModo("dificuldade"); setDifId(""); setHoras(""); setValorHora(""); setMargem(""); setSlots([]);
   }
 
   return (
@@ -139,21 +139,34 @@ export default function PrecificacaoPage() {
       </label>
       {receita && (
         <>
-          <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Dificuldade</span>
-            <select className="input" value={difId} onChange={(e) => setDifId(e.target.value)}>
-              <option value="">dificuldade (divide)...</option>
-              {difs.map((d) => <option key={d.id} value={d.id}>{d.nome} - {String(d.fator_multiplicador ?? "").replace(".", ",")}</option>)}
-            </select>
-          </label>
-          <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Mão de obra — valor base/g</span>
-            <input className="input" placeholder="opcional" inputMode="decimal" value={valorBase} onChange={(e) => setValorBase(e.target.value)} />
-          </label>
-          <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Margem (%)</span>
-            <input className="input" placeholder="ex: 20" inputMode="decimal" value={margem} onChange={(e) => setMargem(e.target.value)} />
-          </label>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className={modo === "dificuldade" ? "btn btn-primary" : "btn"} type="button" onClick={() => setModo("dificuldade")} style={{ minHeight: 48 }}>Por dificuldade</button>
+            <button className={modo === "hora" ? "btn btn-primary" : "btn"} type="button" onClick={() => setModo("hora")} style={{ minHeight: 48 }}>Por hora</button>
+          </div>
+          {modo === "dificuldade" ? (
+            <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Dificuldade</span>
+              <select className="input" value={difId} onChange={(e) => setDifId(e.target.value)}>
+                <option value="">dificuldade (divide)...</option>
+                {difs.map((d) => <option key={d.id} value={d.id}>{d.nome} - {String(d.fator_multiplicador ?? "").replace(".", ",")}</option>)}
+              </select>
+            </label>
+          ) : (
+            <>
+              <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Horas trabalhadas</span>
+                <input className="input" placeholder="ex: 5" inputMode="decimal" value={horas} onChange={(e) => setHoras(e.target.value)} />
+              </label>
+              <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Valor da hora (R$)</span>
+                <input className="input" placeholder="ex: 10" inputMode="decimal" value={valorHora} onChange={(e) => setValorHora(e.target.value)} />
+              </label>
+              <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Margem (%)</span>
+                <input className="input" placeholder="ex: 20" inputMode="decimal" value={margem} onChange={(e) => setMargem(e.target.value)} />
+              </label>
+            </>
+          )}
           {calc?.itens.map((it, i) => (
             <div key={it.key} className="card">
               <strong>Cor {i + 1}</strong>
@@ -179,10 +192,6 @@ export default function PrecificacaoPage() {
                 <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Peso usado nessa peça (g)</span>
                 <input className="input" placeholder="ex: 120" inputMode="decimal" value={slots[i]?.peso || ""} onChange={(e) => setSlot(i, { peso: e.target.value })} />
               </label>
-              <label style={{ display: "grid", gap: 4, minWidth: 0 }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)" }}>Simular R$/g</span>
-                <input className="input" placeholder="opcional" inputMode="decimal" value={slots[i]?.sim || ""} onChange={(e) => setSlot(i, { sim: e.target.value })} />
-              </label>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                 <span style={{ color: "var(--muted)", fontSize: 14 }}>Custo</span>
                 <span className="price">{money(it.custo)}</span>
@@ -192,7 +201,7 @@ export default function PrecificacaoPage() {
           <div className="result-banner">
             <small>Preço final de venda sugerido</small>
             <strong>{money(calc ? calc.final : 0)}</strong>
-            <small>{String(calc ? calc.pesoTotal : 0).replace(".", ",")}g usados · dificuldade {calc?.difNome} (÷ {String(calc?.fator ?? 1).replace(".", ",")})</small>
+            <small>{String(calc ? calc.pesoTotal : 0).replace(".", ",")}g usados · {modo === "dificuldade" ? `dificuldade ${calc?.difNome} (÷ ${String(calc?.fator ?? 1).replace(".", ",")})` : `${horas || "0"}h × R$ ${valorHora || "0"}`}</small>
           </div>
           <div className="card">
             <div className="ratio-bar" aria-hidden="true">
@@ -201,8 +210,12 @@ export default function PrecificacaoPage() {
               <span style={{ width: `${calc?.pMar || 0}%`, background: "var(--success)" }} />
             </div>
             <span style={{ fontSize: 14 }}>Material: {money(calc ? calc.material : 0)}</span>
-            <span style={{ fontSize: 14 }}>Mão de obra: {money(calc ? calc.mao : 0)}</span>
-            <span style={{ fontSize: 14 }}>Margem: {money(calc ? calc.margemValor : 0)}</span>
+            {modo === "hora" && (
+              <>
+                <span style={{ fontSize: 14 }}>Mão de obra: {money(calc ? calc.mao : 0)}</span>
+                <span style={{ fontSize: 14 }}>Margem: {money(calc ? calc.margemValor : 0)}</span>
+              </>
+            )}
           </div>
           <button className="btn" type="button" onClick={limpar}>Limpar</button>
         </>
